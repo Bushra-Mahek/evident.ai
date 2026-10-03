@@ -1,9 +1,7 @@
+import AppRoutes from "./routes/AppRoutes";
+
 function App() {
-  return (
-    <>
-      <h1>TrisectaESG</h1>
-    </>
-  );
+  return <AppRoutes />;
 }
 
 export default App;

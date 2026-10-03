@@ -1,4 +1,5 @@
 import express from "express";
+import cors from "cors";
 import authRoutes from "./routes/authRoutes.js";
 import companyRoutes from "./routes/companyRoutes.js";
 import disclosureRoutes from "./routes/disclosureRoutes.js";
@@ -17,7 +18,7 @@ dotenv.config();
 
 const app = express();
 console.log("🔥 APP.JS LOADED");
-
+app.use(cors({origin:"http://localhost:5173"}));
 app.use(express.json());
 
 app.post("/debug-register", (req, res) => {
