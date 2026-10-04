@@ -50,7 +50,7 @@ export const viewDisclosure = async (req, res, next) => {
 
 export const viewDisclosures = async (req, res, next) => {
     try {
-        const result = await disclosureService.getDisclosures();
+        const result = await disclosureService.getDisclosures(req.user);
 
         return res.status(200).json({
             disclosures: result

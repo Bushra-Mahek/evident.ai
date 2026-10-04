@@ -39,6 +39,29 @@ export const disclosureModel = {
         return result.rows;
     },
 
+    async getDisclosuresForCompany(companyId) {
+    const result = await db.query(
+        `SELECT *
+         FROM disclosures
+         WHERE company_id = $1
+         ORDER BY created_at DESC`,
+        [companyId]
+    );
+
+    return result.rows;
+},
+
+async getSubmittedDisclosures() {
+    const result = await db.query(
+        `SELECT *
+         FROM disclosures
+         WHERE status <> 'DRAFT'
+         ORDER BY created_at DESC`
+    );
+
+    return result.rows;
+},
+
     async updateDisclosure(id, data, client = db) {
     const result = await client.query(
         `UPDATE disclosures

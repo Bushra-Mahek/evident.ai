@@ -15,7 +15,7 @@ router.post(
 router.get(
     "/",
     authenticate,
-    authorize("ADMIN", "AUDITOR", "REGULATOR"),
+    authorize("COMPANY_USER","ADMIN", "AUDITOR", "REGULATOR"),
     viewDisclosures
 );
 

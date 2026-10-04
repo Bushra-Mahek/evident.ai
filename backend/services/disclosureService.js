@@ -52,23 +52,73 @@ export const disclosureService = {
     });
 },
 
-    async getDisclosure(id,user){
-        const disclosure = await disclosureModel.getDisclosure(id);
-        if(!disclosure){
-             throw new AppError("Disclosure not found", 404);
-        }
+    async getDisclosure(id, user) {
+    const disclosure = await disclosureModel.getDisclosure(id);
 
-        if(user.role === "COMPANY_USER" && disclosure.company_id  !== user.company_id){
+    if (!disclosure) {
+        throw new AppError("Disclosure not found", 404);
+    }
+
+    // Company users can only access disclosures belonging to their company
+    if (user.role === "COMPANY_USER") {
+        if (disclosure.company_id !== user.company_id) {
             throw new AppError("Access denied", 403);
         }
-        
-        return disclosure;
-    },
 
-    async getDisclosures(){
-        const ds = await disclosureModel.getDisclosures();
-        return ds;
-    },
+        return disclosure;
+    }
+
+    // Auditors can review submitted disclosures, not drafts
+    if (user.role === "AUDITOR") {
+        if (disclosure.status === "DRAFT") {
+            throw new AppError("Access denied", 403);
+        }
+
+        return disclosure;
+    }
+
+    // Regulators have read-only access to submitted disclosures, not drafts
+    if (user.role === "REGULATOR") {
+        if (disclosure.status === "DRAFT") {
+            throw new AppError("Access denied", 403);
+        }
+
+        return disclosure;
+    }
+
+    // Admins can access any disclosure
+    if (user.role === "ADMIN") {
+        return disclosure;
+    }
+
+    throw new AppError("Access denied", 403);
+},
+
+    async getDisclosures(user){
+        if (user.role === "COMPANY_USER") {
+
+        return await disclosureModel.getDisclosuresForCompany(
+            user.company_id
+        );
+    }
+
+    if (
+        user.role === "REGULATOR" ||
+        user.role === "AUDITOR"
+    ) {
+
+        return await disclosureModel.getSubmittedDisclosures();
+    }
+
+
+    if (user.role === "ADMIN") {
+
+        return await disclosureModel.getDisclosures();
+    }
+
+    throw new AppError("Access denied", 403);
+
+},
 
     async updateDisclosure(id, data, user, ipAddress) {
 
