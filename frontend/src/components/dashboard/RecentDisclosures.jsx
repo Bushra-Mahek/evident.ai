@@ -40,11 +40,13 @@ export function RecentDisclosures(props){
                   
                   {/* Status label (Draft, Under Review, Verified, Rejected) */}
                   <td>
-                    <span className={`status-badge status-${disclosure.status
-    .toLowerCase()
-    .replaceAll('_', '-')}`}>
-                      {disclosure.status}
-                    </span>
+                    <span
+    className={`status-badge status-${(disclosure.status || "unknown")
+        .toLowerCase()
+        .replaceAll("_", "-")}`}
+>
+    {disclosure.status || "Unknown"}
+</span>
                   </td>
                   
                   {/* Created At Timestamp formatted neatly */}

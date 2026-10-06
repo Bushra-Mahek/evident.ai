@@ -4,8 +4,9 @@ import { Register } from '../pages/Register.jsx';
 import { Dashboard } from '../pages/Dashboard.jsx';
 import { ProtectedRoutes } from './ProtectedRoutes.jsx';
 import { AppLayout } from '../layouts/AppLayout.jsx';
-import { ComingSoon } from '../pages/ComingSoon.jsx';
-
+import { Disclosures } from '../pages/Disclosures.jsx';
+import { ComingSoon } from '../pages/comingSoon.jsx';
+import { Disclosure } from '../pages/Disclosure.jsx';
 
 import { RoleRoute } from './RoleRoute.jsx';
 
@@ -17,7 +18,19 @@ function AppRoutes(){
                 <Route path="/login" element={<Login/>}/>
                 <Route path="/register" element={<Register/>}/>
                 <Route path="/dashboard" element={ <ProtectedRoutes> <AppLayout><Dashboard/></AppLayout></ProtectedRoutes>} />
-                <Route path="/disclosures" element={<ProtectedRoutes> <RoleRoute allowed={["COMPANY_USER","REGULATOR"]}><AppLayout><ComingSoon/></AppLayout></RoleRoute></ProtectedRoutes>} />
+                <Route path="/disclosures" element={<ProtectedRoutes> <RoleRoute allowed={["COMPANY_USER"]}><AppLayout><Disclosures/></AppLayout></RoleRoute></ProtectedRoutes>} />
+                <Route
+    path="/disclosures/:disclosureId"
+    element={
+        <ProtectedRoutes>
+            <RoleRoute allowed={["COMPANY_USER"]}>
+                <AppLayout>
+                    <Disclosure />
+                </AppLayout>
+            </RoleRoute>
+        </ProtectedRoutes>
+    }  
+/>
                 <Route
     path="/review-disclosures"
     element={
