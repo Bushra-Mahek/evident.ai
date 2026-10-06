@@ -7,6 +7,12 @@ import {
     submitDisclosure
 } from "../api/disclosureApi.js";
 
+import {
+    getDocumentsByDisclosure,
+    uploadDocument,
+    getDocument
+} from "../api/documentApi.js";
+
 import { getMetrics } from "../api/metricsApi.js";
 
 import {
@@ -42,6 +48,14 @@ export function Disclosure() {
     const [showAddBtn, setShowAddBtn] = useState(false);
 
     const [editDataPointId, setEditDataPointId] = useState(null);
+
+
+    //evidence state
+    const [documents, setDocuments] = useState([]);
+
+const [selectedFile, setSelectedFile] = useState(null);
+
+const [uploadingDocument, setUploadingDocument] = useState(false);
 
 
     // Form for creating a new data point
@@ -168,7 +182,36 @@ export function Disclosure() {
         loadDataPoints();
 
     }, [disclosureId]);
+    
 
+    //load documents
+    useEffect(() => {
+
+    const loadDocuments = async () => {
+
+        try {
+
+            const data =
+                await getDocumentsByDisclosure(disclosureId);
+
+            setDocuments(data.documents);
+
+        }
+        catch (error) {
+
+            console.error(
+                error.response?.data?.message ||
+                "Failed to load documents"
+            );
+
+        }
+
+    };
+
+
+    loadDocuments();
+
+}, [disclosureId]);
 
     // =========================
     // ADD DATA POINT
@@ -344,6 +387,87 @@ export function Disclosure() {
         }
 
     }
+
+    //upload function
+    async function handleDocumentUpload(event) {
+
+    event.preventDefault();
+
+    if (!selectedFile) {
+
+        alert("Please select a file.");
+
+        return;
+
+    }
+
+
+    try {
+
+        setUploadingDocument(true);
+
+
+        const data = await uploadDocument(
+            disclosureId,
+            selectedFile
+        );
+
+
+        setDocuments(prev => [
+            ...prev,
+            data.document
+        ]);
+
+
+        setSelectedFile(null);
+
+
+        // Reset file input
+        event.target.reset();
+
+
+        alert("Evidence uploaded successfully.");
+
+    }
+    catch (error) {
+
+        alert(
+            error.response?.data?.message ||
+            "Failed to upload evidence."
+        );
+
+    }
+    finally {
+
+        setUploadingDocument(false);
+
+    }
+
+}
+
+    //view function
+    async function handleViewDocument(id) {
+
+    try {
+
+        const data = await getDocument(id);
+
+        window.open(
+            data.downloadUrl,
+            "_blank"
+        );
+
+    }
+    catch (error) {
+
+        alert(
+            error.response?.data?.message ||
+            "Failed to open document."
+        );
+
+    }
+
+}
 
 
     // =========================
@@ -1043,26 +1167,179 @@ export function Disclosure() {
             />
 
 
-            <h3
-                style={{
-                    fontSize: "0.9rem",
-                    color: "#444",
-                    textTransform: "uppercase",
-                    letterSpacing: "0.5px"
-                }}
-            >
-                Evidence
-            </h3>
+            {/* =========================
+    2. EVIDENCE
+========================= */}
+
+<hr
+    style={{
+        border: "0",
+        borderTop: "1px solid #eee",
+        margin: "16px 0"
+    }}
+/>
 
 
-            <p
+<div
+    style={{
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center"
+    }}
+>
+
+    <h3
+        style={{
+            fontSize: "0.9rem",
+            color: "#444",
+            textTransform: "uppercase",
+            letterSpacing: "0.5px",
+            margin: 0
+        }}
+    >
+        Evidence
+    </h3>
+
+</div>
+
+
+{/* Upload only when DRAFT */}
+
+{isDraft && (
+
+    <form
+        onSubmit={handleDocumentUpload}
+        style={{
+            padding: "12px",
+            background: "#f9f9f9",
+            marginTop: "12px",
+            border: "1px dashed #bbb"
+        }}
+    >
+
+        <div>
+
+            <label htmlFor="evidenceFile">
+                Supporting Document:
+            </label>
+
+            {" "}
+
+            <input
+                id="evidenceFile"
+                type="file"
+                onChange={(event) =>
+                    setSelectedFile(
+                        event.target.files[0]
+                    )
+                }
+            />
+
+        </div>
+
+
+        <br />
+
+
+        <button
+            type="submit"
+            disabled={uploadingDocument}
+        >
+
+            {uploadingDocument
+                ? "Uploading..."
+                : "Upload Evidence"
+            }
+
+        </button>
+
+    </form>
+
+)}
+
+
+{/* Existing documents */}
+
+<div
+    style={{
+        marginTop: "15px"
+    }}
+>
+
+    {documents.length === 0 ? (
+
+        <p
+            style={{
+                fontSize: "0.95rem",
+                color: "#777"
+            }}
+        >
+            No evidence uploaded yet.
+        </p>
+
+    ) : (
+
+        documents.map(document => (
+
+            <div
+                key={document.id}
                 style={{
-                    fontSize: "0.95rem",
-                    color: "#777"
+                    border: "1px solid #ddd",
+                    padding: "12px",
+                    marginBottom: "10px",
+                    borderRadius: "5px"
                 }}
             >
-                No evidence uploaded
-            </p>
+
+                <p>
+                    <strong>
+                        File:
+                    </strong>{" "}
+                    {document.file_name}
+                </p>
+
+
+                <p>
+                    <strong>
+                        Type:
+                    </strong>{" "}
+                    {document.file_type || "Unknown"}
+                </p>
+
+
+                <p>
+                    <strong>
+                        Uploaded:
+                    </strong>{" "}
+
+                    {
+                        document.uploaded_at
+                            ? new Date(
+                                document.uploaded_at
+                            ).toLocaleDateString()
+                            : "N/A"
+                    }
+
+                </p>
+
+
+                <button
+                    onClick={() =>
+                        handleViewDocument(
+                            document.id
+                        )
+                    }
+                >
+                    View Document
+                </button>
+
+            </div>
+
+        ))
+
+    )}
+
+</div>
 
 
             {/* =========================
