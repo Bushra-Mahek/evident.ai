@@ -205,3 +205,17 @@ export const getDisclosureTimeline = async (req, res, next) => {
         next(err);
     }
 };
+
+export const getCompletedReviews = async (req, res, next) => {
+    try {
+        const result =
+            await disclosureService.getCompletedReviews(req.user);
+
+        return res.status(200).json({
+            disclosures: result
+        });
+
+    } catch (err) {
+        next(err);
+    }
+};

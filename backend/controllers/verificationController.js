@@ -11,11 +11,11 @@ export const verifyDisclosure = async (
     try {
 
         const result =
-            await verificationService.verifyDisclosure(
-                req.params.id,
-                req.user,
-                req.body.notes
-            );
+    await verificationService.verifyDisclosure(
+        req.params.id,
+        req.user,
+        req.body?.notes
+    );
 
         return res.status(200).json({
             message:
@@ -40,11 +40,11 @@ export const rejectDisclosure = async (
     try {
 
         const result =
-            await verificationService.rejectDisclosure(
-                req.params.id,
-                req.user,
-                req.body.notes
-            );
+    await verificationService.rejectDisclosure(
+        req.params.id,
+        req.user,
+        req.body?.notes
+    );
 
         return res.status(200).json({
             message:

@@ -1,7 +1,7 @@
 import express from "express"
 import { authenticate } from "../middlewares/authMiddleware.js";
 import { authorize } from "../middlewares/roleMiddleware.js";
-import { createDisclosure, viewDisclosure, viewDisclosures, updateDisclosure, deleteDisclosure, reviseDisclosure, submitDisclosure, getDisclosureReview, getPendingReviews, getDisclosureTimeline} from "../controllers/disclosureController.js";
+import { createDisclosure, viewDisclosure, viewDisclosures, updateDisclosure, deleteDisclosure, reviseDisclosure, submitDisclosure, getDisclosureReview, getPendingReviews, getDisclosureTimeline, getCompletedReviews} from "../controllers/disclosureController.js";
 
 const router = express.Router();
 
@@ -36,6 +36,13 @@ router.get(
     "/:id/timeline",
     authenticate,
     getDisclosureTimeline
+);
+
+router.get(
+    "/completed-reviews",
+    authenticate,
+    authorize("AUDITOR"),
+    getCompletedReviews
 );
 
 router.get(

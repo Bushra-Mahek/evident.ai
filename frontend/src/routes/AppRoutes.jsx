@@ -7,8 +7,11 @@ import { AppLayout } from '../layouts/AppLayout.jsx';
 import { Disclosures } from '../pages/Disclosures.jsx';
 import { ComingSoon } from '../pages/comingSoon.jsx';
 import { Disclosure } from '../pages/Disclosure.jsx';
-
+import { DisclosureReview } from "../pages/DisclosureReview.jsx";
 import { RoleRoute } from './RoleRoute.jsx';
+import { ReviewDisclosures } from "../pages/ReviewDisclosures.jsx";
+import { AuditHistory } from "../pages/AuditHistory.jsx";
+import { AuditHistoryDetail } from "../pages/AuditHistoryDetail.jsx";
 
 function AppRoutes(){
     return(
@@ -25,24 +28,36 @@ function AppRoutes(){
         <ProtectedRoutes>
             <RoleRoute allowed={["COMPANY_USER"]}>
                 <AppLayout>
-                    <Disclosure />
+                    <ReviewDisclosures/>
                 </AppLayout>
             </RoleRoute>
         </ProtectedRoutes>
     }  
 />
                 <Route
-    path="/review-disclosures"
+    path="/review-disclosures/:disclosureId"
     element={
         <ProtectedRoutes>
             <RoleRoute allowed={["AUDITOR"]}>
                 <AppLayout>
-                    <ComingSoon />
+                    <DisclosureReview />
                 </AppLayout>
             </RoleRoute>
         </ProtectedRoutes>
     }
     
+/>
+        <Route
+    path="/review-disclosures"
+    element={
+        <ProtectedRoutes>
+            <RoleRoute allowed={["AUDITOR"]}>
+                <AppLayout>
+                    <ReviewDisclosures />
+                </AppLayout>
+            </RoleRoute>
+        </ProtectedRoutes>
+    }
 />
 
         <Route
@@ -90,12 +105,23 @@ function AppRoutes(){
         <ProtectedRoutes>
             <RoleRoute allowed={["AUDITOR"]}>
                 <AppLayout>
-                    <ComingSoon />
+                    <AuditHistory />
                 </AppLayout>
             </RoleRoute>
         </ProtectedRoutes>
     }
         />
+
+        <Route
+    path="/audit-history/:disclosureId"
+    element={
+        <ProtectedRoutes>
+            <RoleRoute allowed={["AUDITOR"]}>
+                <AuditHistoryDetail />
+            </RoleRoute>
+        </ProtectedRoutes>
+    }
+/>
 
 
             </Routes>

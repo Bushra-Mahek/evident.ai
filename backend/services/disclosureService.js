@@ -835,7 +835,16 @@ async getDisclosureTimeline(id, user) {
         );
     }
 
-    return await disclosureModel.getDisclosureTimeline(id);
+    return await disclosureAuditModel.getHistory(id);
+},
+
+async getCompletedReviews(user) {
+
+    if (user.role !== "AUDITOR") {
+        throw new AppError("Access denied", 403);
+    }
+
+    return await disclosureModel.getCompletedReviews();
 },
 
 };

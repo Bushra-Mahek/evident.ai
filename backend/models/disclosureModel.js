@@ -133,6 +133,17 @@ async getPendingReviews() {
     return result.rows;
 },
 
+async getCompletedReviews() {
+    const result = await db.query(
+        `SELECT *
+         FROM disclosures
+         WHERE status IN ('VERIFIED', 'REJECTED')
+         ORDER BY updated_at DESC`
+    );
+
+    return result.rows;
+},
+
 async getDisclosureTimeline(disclosureId) {
     const result = await db.query(
         `SELECT *
