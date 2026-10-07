@@ -31,3 +31,8 @@ export const submitDisclosure = async (id)=>{
     const response = await api.post(`/disclosures/${id}/submit`);
     return response.data;
 };
+
+export const getDisclosureReview = async (id) => {
+    const response = await api.get(`/disclosures/${id}/review`);
+    return response.data;
+};

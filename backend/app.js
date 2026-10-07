@@ -10,6 +10,7 @@ import verificationRoutes
     from "./routes/verificationRoutes.js";
 import certificateRoutes from "./routes/certificateRoutes.js";
 import dashboardRoutes from "./routes/dashboardRoutes.js";
+import validationRoutes from "./routes/validationRoutes.js";
 
 
 import { errorHandler } from "./middlewares/errorMiddleware.js";
@@ -37,6 +38,7 @@ app.use(
     "/api/documents",
     documentRoutes
 );
+app.use("/api/validation", validationRoutes);
 app.use(
     "/api/verifications",
     verificationRoutes

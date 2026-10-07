@@ -1,10 +1,15 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import {
+    runValidation,
+    getValidationResults
+} from "../api/validationApi.js";
 
 import {
     getDisclosure,
     deleteDisclosure,
-    submitDisclosure
+    submitDisclosure,
+    getDisclosureReview
 } from "../api/disclosureApi.js";
 
 import {
@@ -76,6 +81,14 @@ const [uploadingDocument, setUploadingDocument] = useState(false);
         periodEnd: ""
     });
 
+    //disclsourereview
+    const [crossVerificationResults, setCrossVerificationResults] = useState([]);
+
+
+//validation states
+const [validationResults, setValidationResults] = useState([]);
+const [validationSummary, setValidationSummary] = useState(null);
+const [validationLoading, setValidationLoading] = useState(false);
 
     // =========================
     // LOAD DISCLOSURE
@@ -212,6 +225,45 @@ const [uploadingDocument, setUploadingDocument] = useState(false);
     loadDocuments();
 
 }, [disclosureId]);
+
+//load disclosureReview:
+useEffect(() => {
+
+    const loadReviewData = async () => {
+
+        try {
+
+            const data = await getDisclosureReview(disclosureId);
+
+
+            console.log("VALIDATION:", data.validationResults);
+
+            setCrossVerificationResults(
+                data.crossVerificationResults || []
+            );
+
+            setValidationResults(
+                data.validationResults || []
+            );
+
+        } catch (error) {
+
+            console.error(
+                error.response?.data?.message ||
+                "Failed to load verification and validation results"
+            );
+
+        }
+
+    };
+
+    loadReviewData();
+
+}, [disclosureId]);
+
+
+
+
 
     // =========================
     // ADD DATA POINT
@@ -457,6 +509,25 @@ const [uploadingDocument, setUploadingDocument] = useState(false);
     window.open(data.document.downloadUrl, "_blank");
 
 
+}
+
+async function handleRunValidation() {
+    try {
+        setValidationLoading(true);
+
+        const data = await runValidation(disclosureId);
+
+        setValidationResults(data.results);
+        setValidationSummary(data.summary);
+
+    } catch (error) {
+        alert(
+            error.response?.data?.message ||
+            "Validation failed"
+        );
+    } finally {
+        setValidationLoading(false);
+    }
 }
 
 
@@ -1249,7 +1320,7 @@ const [uploadingDocument, setUploadingDocument] = useState(false);
 
 
 {/* Existing documents */}
-console.log("DOCUMENTS:", documents);
+
 
 <div
     style={{
@@ -1358,15 +1429,55 @@ console.log("DOCUMENTS:", documents);
             </h3>
 
 
-            <p
+            {crossVerificationResults.length === 0 ? (
+
+    <p style={{ color: "#777" }}>
+        No cross-verification results available yet.
+    </p>
+
+) : (
+
+    <div>
+
+        {crossVerificationResults.map(result => (
+
+            <div
+                key={result.id}
                 style={{
-                    fontSize: "0.95rem",
-                    color: "#777"
+                    border: "1px solid #ddd",
+                    padding: "12px",
+                    marginBottom: "10px",
+                    borderRadius: "5px"
                 }}
             >
-                Cross-verification is performed automatically when
-                data points are created or updated.
-            </p>
+
+                <p>
+                    <strong>Data Point:</strong>{" "}
+                    {result.data_point_id}
+                </p>
+
+                <p>
+                    <strong>Company Value:</strong>{" "}
+                    {result.company_value ?? "N/A"}
+                </p>
+
+                <p>
+                    <strong>External Value:</strong>{" "}
+                    {result.external_value ?? "N/A"}
+                </p>
+
+                <p>
+                    <strong>Status:</strong>{" "}
+                    {result.verification_status}
+                </p>
+
+            </div>
+
+        ))}
+
+    </div>
+    
+)}
 
 
             {/* =========================
@@ -1394,14 +1505,63 @@ console.log("DOCUMENTS:", documents);
             </h3>
 
 
-            <p
-                style={{
-                    fontSize: "0.95rem",
-                    color: "#777"
-                }}
-            >
-                Validation will be performed before submission.
-            </p>
+            <h2>VALIDATION</h2>
+
+<button
+    type="button"
+    onClick={handleRunValidation}
+    disabled={validationLoading}
+>
+    {validationLoading
+        ? "Running Validation..."
+        : "Run Validation"}
+</button>
+
+{validationSummary && (
+    <div>
+        <p>
+            <strong>Passed:</strong>{" "}
+            {validationSummary.passed}
+        </p>
+
+        <p>
+            <strong>Warnings:</strong>{" "}
+            {validationSummary.warnings}
+        </p>
+
+        <p>
+            <strong>Failed:</strong>{" "}
+            {validationSummary.failed}
+        </p>
+
+        <p>
+            <strong>Overall:</strong>{" "}
+            {validationSummary.failed === 0
+                ? "VALID"
+                : "FAILED"}
+        </p>
+    </div>
+)}
+
+{validationResults.length > 0 && (
+    <div>
+        {validationResults.map((result) => (
+            <div key={result.id || result.ruleCode}>
+                <strong>
+                    {result.ruleCode}
+                </strong>
+
+                {" — "}
+
+                {result.severity}
+
+                <p>
+                    {result.message}
+                </p>
+            </div>
+        ))}
+    </div>
+)}
 
 
             {/* =========================

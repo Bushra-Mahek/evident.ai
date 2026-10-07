@@ -1,6 +1,7 @@
 import bcrypt from  "bcrypt"
 import { userModel } from "../models/userModel.js"
 import { generateToken } from "../utils/jwt.js"
+import { companyModel } from "../models/companyModel.js";
 
 export const authService = {
     async registerUser(fullName, email, password, role, companyId){
@@ -23,7 +24,7 @@ export const authService = {
     }
 
     if (companyId) {
-    const company = await companyModel.getById(companyId);
+    const company = await companyModel.getCompany(companyId);
 
     if (!company) {
         throw new Error("Company not found");

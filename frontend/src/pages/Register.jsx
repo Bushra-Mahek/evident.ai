@@ -11,11 +11,25 @@ export function Register(){
 
     async function handleSubmit(event){
         event.preventDefault();
+        try{
         const data = await authApiRegister(fullName,email,password,role,companyId);
 
     console.log(data);
+    alert("Registration successful");
+
 
     }
+
+        catch(err){
+            console.error(
+            "REGISTER ERROR:",
+            err.response?.data || err.message
+        );
+        }
+
+
+    }
+
 
     return(
         <form onSubmit={handleSubmit}>
