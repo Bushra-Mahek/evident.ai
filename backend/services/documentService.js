@@ -5,7 +5,8 @@ import { AppError } from "../middlewares/errorMiddleware.js";
 import { transaction } from "../config/db.js";
 
 import s3 from "../config/s3.js";
-import { PutObjectCommand } from "@aws-sdk/client-s3";
+import { GetObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
 import crypto from "crypto";
 
@@ -124,7 +125,21 @@ export const documentService = {
             );
         }
 
-        return document;
+        const command = new GetObjectCommand({
+        Bucket: process.env.AWS_S3_BUCKET,
+        Key: document.file_url
+    });
+
+    const downloadUrl = await getSignedUrl(
+        s3,
+        command,
+        { expiresIn: 300 }
+    );
+
+    return {
+        ...document,
+        downloadUrl
+    };
     },
 
 

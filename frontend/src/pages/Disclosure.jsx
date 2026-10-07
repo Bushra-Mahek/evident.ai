@@ -446,26 +446,16 @@ const [uploadingDocument, setUploadingDocument] = useState(false);
 }
 
     //view function
-    async function handleViewDocument(id) {
+    async function handleViewDocument(doc) {
 
-    try {
+    console.log("DOCUMENT TO VIEW:", doc);
 
-        const data = await getDocument(id);
+    const data = await getDocument(doc.id);
 
-        window.open(
-            data.downloadUrl,
-            "_blank"
-        );
+    console.log("DOCUMENT RESPONSE:", data);
 
-    }
-    catch (error) {
+    window.open(data.document.downloadUrl, "_blank");
 
-        alert(
-            error.response?.data?.message ||
-            "Failed to open document."
-        );
-
-    }
 
 }
 
@@ -1259,6 +1249,7 @@ const [uploadingDocument, setUploadingDocument] = useState(false);
 
 
 {/* Existing documents */}
+console.log("DOCUMENTS:", documents);
 
 <div
     style={{
@@ -1279,10 +1270,10 @@ const [uploadingDocument, setUploadingDocument] = useState(false);
 
     ) : (
 
-        documents.map(document => (
+        documents.map(doc => (
 
             <div
-                key={document.id}
+                key={doc.id}
                 style={{
                     border: "1px solid #ddd",
                     padding: "12px",
@@ -1295,7 +1286,7 @@ const [uploadingDocument, setUploadingDocument] = useState(false);
                     <strong>
                         File:
                     </strong>{" "}
-                    {document.file_name}
+                    {doc.file_name}
                 </p>
 
 
@@ -1303,7 +1294,7 @@ const [uploadingDocument, setUploadingDocument] = useState(false);
                     <strong>
                         Type:
                     </strong>{" "}
-                    {document.file_type || "Unknown"}
+                    {doc.file_type || "Unknown"}
                 </p>
 
 
@@ -1313,9 +1304,9 @@ const [uploadingDocument, setUploadingDocument] = useState(false);
                     </strong>{" "}
 
                     {
-                        document.uploaded_at
+                        doc.uploaded_at
                             ? new Date(
-                                document.uploaded_at
+                                doc.uploaded_at
                             ).toLocaleDateString()
                             : "N/A"
                     }
@@ -1326,7 +1317,7 @@ const [uploadingDocument, setUploadingDocument] = useState(false);
                 <button
                     onClick={() =>
                         handleViewDocument(
-                            document.id
+                            doc
                         )
                     }
                 >
