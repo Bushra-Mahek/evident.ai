@@ -5,43 +5,33 @@ export function SummaryCards(props){
     return(
         <>
         
-    <article class="esg-summary-card">
-  
-        
-  <div class="metrics-row main-stats">
-    
-    <div class="metric-item">
-      <span class="metric-label">Total</span>
-      <strong class="metric-value">{data.total}</strong>
-    </div>
-    
-    <div class="metric-item">
-      <span class="metric-label">Draft</span>
-      <strong class="metric-value">{data.draft}</strong>
-    </div>
-    
-    <div class="metric-item">
-      <span class="metric-label">Under Review</span>
-      <strong class="metric-value">{data.underReview}</strong>
-    </div>
-    
+    <article className="esg-summary-card">
+
+  <div className="metric-item">
+    <span className="metric-label">Total</span>
+    <strong className="metric-value">{data.total}</strong>
   </div>
 
-
-  <div class="metrics-row status-stats">
-    
-    <div class="metric-item">
-      <span class="metric-label">Verified</span>
-      <strong class="metric-value">{data.verified}</strong>
-    </div>
-    
-    <div class="metric-item">
-      <span class="metric-label">Rejected</span>
-      <strong class="metric-value">{data.rejected}</strong>
-    </div>
-    
+  <div className="metric-item">
+    <span className="metric-label">Draft</span>
+    <strong className="metric-value">{data.draft}</strong>
   </div>
-  
+
+  <div className="metric-item">
+    <span className="metric-label">Under Review</span>
+    <strong className="metric-value">{data.underReview}</strong>
+  </div>
+
+  <div className="metric-item">
+    <span className="metric-label">Verified</span>
+    <strong className="metric-value">{data.verified}</strong>
+  </div>
+
+  <div className="metric-item">
+    <span className="metric-label">Rejected</span>
+    <strong className="metric-value">{data.rejected}</strong>
+  </div>
+
 </article>
         </>
     )

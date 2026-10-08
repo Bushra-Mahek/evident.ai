@@ -6,6 +6,7 @@ import {
     verifyDisclosure,
     rejectDisclosure
 } from "../api/reviewApi.js";
+import "./Auditor.css";
 
 export function DisclosureReview() {
 
@@ -134,218 +135,546 @@ export function DisclosureReview() {
 
 
     return (
+    <div className="auditor-page">
 
-        <div>
+        {/* HEADER */}
 
-            <h1>Disclosure Review</h1>
+        <section className="review-header">
 
-            <hr />
+            <div>
 
-            <h2>Disclosure Details</h2>
+                <span className="page-eyebrow">
+                    AUDITOR WORKSPACE
+                </span>
 
-            <p>
-                <strong>Reporting Year:</strong>{" "}
-                {disclosure.reporting_year}
-            </p>
+                <div className="review-title-row">
 
-            <p>
-                <strong>Status:</strong>{" "}
-                {disclosure.status}
-            </p>
+                    <div>
+                        <h1>
+                            {disclosure.reporting_year} Disclosure Review
+                        </h1>
 
-            <p>
-                <strong>Company ID:</strong>{" "}
-                {disclosure.company_id}
-            </p>
+                        <p>
+                            Review the submitted ESG disclosure,
+                            supporting evidence and verification results
+                            before making an audit decision.
+                        </p>
+                    </div>
+
+                    <span className="review-status-badge">
+                        <span className="review-status-dot"></span>
+                        {disclosure.status}
+                    </span>
+
+                </div>
+
+            </div>
 
 
-            <hr />
+            <div className="review-meta">
 
-            <h2>Data Points</h2>
+                <div>
+                    <span>REPORTING YEAR</span>
+                    <strong>{disclosure.reporting_year}</strong>
+                </div>
+
+                <div>
+                    <span>COMPANY ID</span>
+                    <strong>{disclosure.company_id}</strong>
+                </div>
+
+                <div>
+                    <span>REVIEW STATUS</span>
+                    <strong>Awaiting Decision</strong>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        {/* DATA POINTS */}
+
+        <section className="auditor-section">
+
+            <div className="auditor-section-header">
+
+                <div className="auditor-section-title">
+
+                    <div className="auditor-section-number">
+                        01
+                    </div>
+
+                    <div>
+                        <span className="section-eyebrow">
+                            REPORTED DATA
+                        </span>
+
+                        <h2>Data Points</h2>
+
+                        <p>
+                            Values submitted by the company for this
+                            reporting period.
+                        </p>
+                    </div>
+
+                </div>
+
+                <span className="auditor-count">
+                    {dataPoints.length}{" "}
+                    {dataPoints.length === 1
+                        ? "data point"
+                        : "data points"}
+                </span>
+
+            </div>
+
 
             {dataPoints.length === 0 ? (
 
-                <p>No data points.</p>
+                <div className="auditor-empty">
+                    No data points submitted.
+                </div>
 
             ) : (
 
-                dataPoints.map((dataPoint) => (
+                <div className="review-data-list">
 
-                    <div key={dataPoint.id}>
+                    {dataPoints.map((dataPoint) => (
 
-                        <p>
-                            <strong>Value:</strong>{" "}
-                            {dataPoint.value}
-                        </p>
+                        <article
+                            className="review-data-card"
+                            key={dataPoint.id}
+                        >
 
-                        <p>
-                            <strong>Unit:</strong>{" "}
-                            {dataPoint.unit}
-                        </p>
+                            <div className="review-data-top">
 
-                        <p>
-                            <strong>Period:</strong>{" "}
-                            {dataPoint.period_start}
-                            {" → "}
-                            {dataPoint.period_end}
-                        </p>
+                                <div>
+                                    <span>ESG DATA POINT</span>
 
-                        <hr />
+                                    <h3>
+                                        {dataPoint.metric_name ||
+                                            "Reported Metric"}
+                                    </h3>
+                                </div>
 
-                    </div>
+                                <span className="verified-chip">
+                                    ✓ Submitted
+                                </span>
 
-                ))
+                            </div>
+
+
+                            <div className="review-data-values">
+
+                                <div>
+                                    <span>VALUE</span>
+                                    <strong>
+                                        {dataPoint.value}
+                                    </strong>
+                                </div>
+
+                                <div>
+                                    <span>UNIT</span>
+                                    <strong>
+                                        {dataPoint.unit}
+                                    </strong>
+                                </div>
+
+                                <div>
+                                    <span>REPORTING PERIOD</span>
+                                    <strong>
+                                        {dataPoint.period_start}
+                                        {" → "}
+                                        {dataPoint.period_end}
+                                    </strong>
+                                </div>
+
+                            </div>
+
+                        </article>
+
+                    ))}
+
+                </div>
 
             )}
 
+        </section>
 
-            <h2>Evidence</h2>
+
+        {/* EVIDENCE */}
+
+        <section className="auditor-section">
+
+            <div className="auditor-section-header">
+
+                <div className="auditor-section-title">
+
+                    <div className="auditor-section-number">
+                        02
+                    </div>
+
+                    <div>
+                        <span className="section-eyebrow">
+                            SUPPORTING DOCUMENTATION
+                        </span>
+
+                        <h2>Evidence</h2>
+
+                        <p>
+                            Documents submitted to substantiate the
+                            reported ESG data.
+                        </p>
+                    </div>
+
+                </div>
+
+                <span className="auditor-count">
+                    {documents.length}{" "}
+                    {documents.length === 1
+                        ? "document"
+                        : "documents"}
+                </span>
+
+            </div>
+
 
             {documents.length === 0 ? (
 
-                <p>No supporting documents.</p>
+                <div className="auditor-empty">
+                    No supporting documents submitted.
+                </div>
 
             ) : (
 
-                documents.map((document) => (
+                <div className="review-documents">
 
-                    <div key={document.id}>
+                    {documents.map((document) => (
 
-                        <p>
-                            <strong>File:</strong>{" "}
-                            {document.file_name}
-                        </p>
+                        <div
+                            className="review-document-card"
+                            key={document.id}
+                        >
 
-                    </div>
+                            <div className="review-document-icon">
+                                DOC
+                            </div>
 
-                ))
+                            <div className="review-document-info">
 
-            )}
+                                <strong>
+                                    {document.file_name}
+                                </strong>
 
+                                <span>
+                                    {document.file_type ||
+                                        "Supporting document"}
+                                </span>
 
-            <h2>Cross-Verification</h2>
+                            </div>
 
-            {crossVerificationResults.length === 0 ? (
+                            <span className="document-available">
+                                Available
+                            </span>
 
-                <p>No cross-verification results.</p>
+                        </div>
 
-            ) : (
+                    ))}
 
-                crossVerificationResults.map((result) => (
-
-                    <div key={result.id}>
-
-                        <p>
-                            <strong>Company Value:</strong>{" "}
-                            {result.company_value}
-                        </p>
-
-                        <p>
-                            <strong>External Value:</strong>{" "}
-                            {result.external_value}
-                        </p>
-
-                        <p>
-                            <strong>Status:</strong>{" "}
-                            {result.verification_status}
-                        </p>
-
-                    </div>
-
-                ))
+                </div>
 
             )}
 
+        </section>
 
-            <h2>Validation</h2>
 
-            {validationResults.length === 0 ? (
+        {/* VERIFICATION */}
 
-                <p>No validation results.</p>
+        <section className="auditor-verification-grid">
 
-            ) : (
+            {/* CROSS VERIFICATION */}
 
-                validationResults.map((result) => (
+            <article className="auditor-review-card">
 
-                    <div key={result.id}>
+                <div className="auditor-card-heading">
 
-                        <strong>
-                            {result.rule_code}
-                        </strong>
+                    <div className="auditor-card-icon success-icon">
+                        ✓
+                    </div>
 
-                        {" — "}
+                    <div>
+                        <span className="section-eyebrow">
+                            SOURCE CHECK
+                        </span>
 
-                        {result.severity}
+                        <h2>Cross-Verification</h2>
+                    </div>
 
-                        <p>
-                            {result.message}
-                        </p>
+                </div>
+
+
+                {crossVerificationResults.length === 0 ? (
+
+                    <div className="auditor-empty">
+                        No cross-verification results available.
+                    </div>
+
+                ) : (
+
+                    <div className="review-result-list">
+
+                        {crossVerificationResults.map((result) => (
+
+                            <div
+                                className="review-result-card"
+                                key={result.id}
+                            >
+
+                                <div className="review-result-heading">
+
+                                    <strong>
+                                        Company vs External Source
+                                    </strong>
+
+                                    <span className="result-verified">
+                                        {result.verification_status}
+                                    </span>
+
+                                </div>
+
+                                <div className="review-result-values">
+
+                                    <div>
+                                        <span>COMPANY VALUE</span>
+                                        <strong>
+                                            {result.company_value}
+                                        </strong>
+                                    </div>
+
+                                    <div>
+                                        <span>EXTERNAL VALUE</span>
+                                        <strong>
+                                            {result.external_value}
+                                        </strong>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        ))}
 
                     </div>
 
-                ))
+                )}
 
-            )}
+            </article>
 
 
-            <h2>Blockchain Verification</h2>
+            {/* VALIDATION */}
 
-            {merkleRoots.map((root) => (
+            <article className="auditor-review-card">
 
-                <div key={root.id}>
+                <div className="auditor-card-heading">
+
+                    <div className="auditor-card-icon validation-card-icon">
+                        ✓
+                    </div>
+
+                    <div>
+                        <span className="section-eyebrow">
+                            AUTOMATED CHECKS
+                        </span>
+
+                        <h2>Validation</h2>
+                    </div>
+
+                </div>
+
+
+                {validationResults.length === 0 ? (
+
+                    <div className="auditor-empty">
+                        No validation results available.
+                    </div>
+
+                ) : (
+
+                    <div className="review-validation-list">
+
+                        {validationResults.map((result) => (
+
+                            <div
+                                className="review-validation-item"
+                                key={result.id}
+                            >
+
+                                <div>
+
+                                    <strong>
+                                        {result.rule_code}
+                                    </strong>
+
+                                    <p>
+                                        {result.message}
+                                    </p>
+
+                                </div>
+
+                                <span
+                                    className={`validation-severity validation-severity-${result.severity?.toLowerCase()}`}
+                                >
+                                    {result.severity}
+                                </span>
+
+                            </div>
+
+                        ))}
+
+                    </div>
+
+                )}
+
+            </article>
+
+        </section>
+
+
+        {/* BLOCKCHAIN */}
+
+        <section className="auditor-section">
+
+            <div className="auditor-section-header">
+
+                <div className="auditor-section-title">
+
+                    <div className="auditor-section-number">
+                        03
+                    </div>
+
+                    <div>
+                        <span className="section-eyebrow">
+                            INTEGRITY PROOF
+                        </span>
+
+                        <h2>Blockchain Verification</h2>
+
+                        <p>
+                            Cryptographic proof associated with the
+                            submitted disclosure.
+                        </p>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div className="blockchain-grid">
+
+                {merkleRoots.map((root) => (
+
+                    <div
+                        className="blockchain-card"
+                        key={root.id}
+                    >
+
+                        <span>MERKLE ROOT</span>
+
+                        <code>
+                            {root.merkle_root}
+                        </code>
+
+                        <div className="blockchain-meta">
+                            <span>NETWORK</span>
+                            <strong>{root.network}</strong>
+                        </div>
+
+                    </div>
+
+                ))}
+
+
+                {blockchainTransactions.map((tx) => (
+
+                    <div
+                        className="blockchain-card"
+                        key={tx.id}
+                    >
+
+                        <span>TRANSACTION</span>
+
+                        <code>
+                            {tx.transaction_hash}
+                        </code>
+
+                        <div className="blockchain-meta">
+
+                            <div>
+                                <span>BLOCK</span>
+                                <strong>{tx.block_number}</strong>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                ))}
+
+            </div>
+
+        </section>
+
+
+        {/* AUDITOR DECISION */}
+
+        {disclosure.status === "UNDER_REVIEW" && (
+
+            <section className="auditor-decision-panel">
+
+                <div className="decision-content">
+
+                    <span className="section-eyebrow">
+                        FINAL AUDITOR DECISION
+                    </span>
+
+                    <h2>
+                        Complete the verification review
+                    </h2>
 
                     <p>
-                        <strong>Merkle Root:</strong>{" "}
-                        {root.merkle_root}
-                    </p>
-
-                    <p>
-                        <strong>Network:</strong>{" "}
-                        {root.network}
+                        Verify the disclosure if the submitted data,
+                        evidence, automated checks and integrity proof
+                        are satisfactory. Reject it if corrections
+                        are required.
                     </p>
 
                 </div>
 
-            ))}
 
+                <div className="decision-actions">
 
-            {blockchainTransactions.map((tx) => (
-
-                <div key={tx.id}>
-
-                    <p>
-                        <strong>Transaction:</strong>{" "}
-                        {tx.transaction_hash}
-                    </p>
-
-                    <p>
-                        <strong>Block:</strong>{" "}
-                        {tx.block_number}
-                    </p>
-
-                </div>
-
-            ))}
-
-
-            {disclosure.status === "UNDER_REVIEW" && (
-
-                <div>
-
-                    <hr />
-
-                    <button onClick={handleVerify}>
-                        VERIFY DISCLOSURE
+                    <button
+                        className="auditor-reject-button"
+                        onClick={handleReject}
+                    >
+                        Reject Disclosure
                     </button>
 
-                    <button onClick={handleReject}>
-                        REJECT DISCLOSURE
+                    <button
+                        className="auditor-verify-button"
+                        onClick={handleVerify}
+                    >
+                        Verify Disclosure
+                        <span>→</span>
                     </button>
 
                 </div>
 
-            )}
+            </section>
 
-        </div>
-    );
-}
+        )}
+
+    </div>
+)};

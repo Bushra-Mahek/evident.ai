@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import {
     getPendingReviews
 } from "../api/reviewApi.js";
+import "./Auditor.css";
 
 export function ReviewDisclosures() {
 
@@ -50,73 +51,159 @@ export function ReviewDisclosures() {
 
 
     return (
+    <div className="auditor-page">
 
-        <div>
+        <section className="review-header">
 
-            <h1>Pending Disclosure Reviews</h1>
+            <div>
 
-            {disclosures.length === 0 ? (
+                <span className="page-eyebrow">
+                    AUDITOR WORKSPACE
+                </span>
 
-                <p>No disclosures are currently pending review.</p>
+                <div className="review-title-row">
 
-            ) : (
+                    <div>
 
-                <table>
+                        <h1>Pending Disclosure Reviews</h1>
 
-                    <thead>
+                        <p>
+                            Review ESG disclosures submitted by companies
+                            that are awaiting auditor verification.
+                        </p>
 
-                        <tr>
-                            <th>Reporting Year</th>
-                            <th>Status</th>
-                            <th>Submitted</th>
-                            <th>Action</th>
-                        </tr>
+                    </div>
 
-                    </thead>
+                    <div className="audit-history-count">
+                        {disclosures.length}{" "}
+                        {disclosures.length === 1
+                            ? "pending review"
+                            : "pending reviews"}
+                    </div>
 
-                    <tbody>
+                </div>
 
-                        {disclosures.map((disclosure) => (
+            </div>
 
-                            <tr key={disclosure.id}>
+        </section>
 
-                                <td>
-                                    {disclosure.reporting_year}
-                                </td>
 
-                                <td>
-                                    {disclosure.status}
-                                </td>
+        {disclosures.length === 0 ? (
 
-                                <td>
-                                    {disclosure.submitted_at
-                                        ? new Date(
-                                            disclosure.submitted_at
-                                        ).toLocaleDateString()
-                                        : "—"
-                                    }
-                                </td>
+            <div className="auditor-empty audit-history-empty">
 
-                                <td>
+                <strong>
+                    No pending reviews
+                </strong>
 
-                                    <Link
-                                        to={`/review-disclosures/${disclosure.id}`}
-                                    >
-                                        Review
-                                    </Link>
+                <p>
+                    No disclosures are currently awaiting auditor review.
+                </p>
 
-                                </td>
+            </div>
 
+        ) : (
+
+            <section className="history-card">
+
+                <div className="history-card-header">
+
+                    <div>
+
+                        <span className="section-eyebrow">
+                            REVIEW QUEUE
+                        </span>
+
+                        <h2>Disclosures Awaiting Review</h2>
+
+                    </div>
+
+                    <span className="auditor-count">
+                        {disclosures.length}{" "}
+                        {disclosures.length === 1
+                            ? "disclosure"
+                            : "disclosures"}
+                    </span>
+
+                </div>
+
+
+                <div className="table-wrapper">
+
+                    <table className="data-table auditor-history-table">
+
+                        <thead>
+
+                            <tr>
+                                <th>Reporting Year</th>
+                                <th>Status</th>
+                                <th>Submitted</th>
+                                <th></th>
                             </tr>
 
-                        ))}
+                        </thead>
 
-                    </tbody>
 
-                </table>
+                        <tbody>
 
-            )}
+                            {disclosures.map((disclosure) => (
 
-        </div>
-    );
-}
+                                <tr key={disclosure.id}>
+
+                                    <td>
+                                        <strong>
+                                            {disclosure.reporting_year}
+                                        </strong>
+                                    </td>
+
+
+                                    <td>
+
+                                        <span
+                                            className={`status-badge status-${disclosure.status.toLowerCase()}`}
+                                        >
+                                            <span className="status-dot"></span>
+                                            {disclosure.status}
+                                        </span>
+
+                                    </td>
+
+
+                                    <td>
+
+                                        {disclosure.submitted_at
+                                            ? new Date(
+                                                disclosure.submitted_at
+                                            ).toLocaleDateString()
+                                            : "—"}
+
+                                    </td>
+
+
+                                    <td className="history-action-cell">
+
+                                        <Link
+                                            className="table-link"
+                                            to={`/review-disclosures/${disclosure.id}`}
+                                        >
+                                            Review Disclosure →
+                                        </Link>
+
+                                    </td>
+
+                                </tr>
+
+                            ))}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </section>
+
+        )}
+
+    </div>
+)};

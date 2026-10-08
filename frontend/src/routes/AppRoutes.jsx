@@ -119,7 +119,7 @@ path="/certificates"
         />
 
         <Route
-    path="/audit-History"
+    path="/audit-history"
     element={
         <ProtectedRoutes>
             <RoleRoute allowed={["AUDITOR"]}>

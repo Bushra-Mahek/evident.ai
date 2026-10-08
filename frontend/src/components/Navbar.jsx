@@ -10,7 +10,7 @@ export function Navbar() {
   return (
     <nav className="navbar">
       <div className="navbar-brand">
-        <Link to="/dashboard">VERITAS ESG</Link>
+        <Link to="/dashboard">EVIDENT.AI</Link>
       </div>
 
       <div className="navbar-links">

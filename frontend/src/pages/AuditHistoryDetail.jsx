@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { getDisclosureTimeline } from "../api/reviewApi.js";
+import "./Auditor.css";
 
 export function AuditHistoryDetail() {
     const { disclosureId } = useParams();
@@ -49,62 +50,131 @@ export function AuditHistoryDetail() {
     }
 
     return (
-        <div>
-            <h2>Disclosure Audit Timeline</h2>
+    <div className="auditor-page">
 
-            <Link to="/audit-history">
-                ← Back to Audit History
-            </Link>
+        <section className="review-header">
 
-            <br />
-            <br />
+            <span className="page-eyebrow">
+                AUDITOR WORKSPACE
+            </span>
 
-            {timeline.length === 0 ? (
-                <p>No audit history available.</p>
-            ) : (
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Action</th>
-                            <th>Previous Status</th>
-                            <th>New Status</th>
-                            <th>Actor</th>
-                            <th>Role</th>
-                            <th>Date</th>
-                        </tr>
-                    </thead>
+            <div className="review-title-row">
 
-                    <tbody>
-                        {timeline.map((event) => (
-                            <tr key={event.id}>
-                                <td>{event.action}</td>
+                <div>
+                    <h1>Disclosure Audit Timeline</h1>
 
-                                <td>
-                                    {event.old_status || "-"}
-                                </td>
+                    <p>
+                        A chronological record of actions and status
+                        changes associated with this disclosure.
+                    </p>
+                </div>
 
-                                <td>
-                                    {event.new_status || "-"}
-                                </td>
+                <Link
+                    className="audit-back-link"
+                    to="/audit-history"
+                >
+                    ← Audit History
+                </Link>
 
-                                <td>
-                                    {event.actor_name || "-"}
-                                </td>
+            </div>
 
-                                <td>
-                                    {event.actor_role || "-"}
-                                </td>
+        </section>
 
-                                <td>
-                                    {formatDate(event.created_at)}
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            )}
-        </div>
-    );
-}
 
-export default AuditHistoryDetail;
+        {timeline.length === 0 ? (
+
+            <div className="auditor-empty audit-history-empty">
+                No audit history available.
+            </div>
+
+        ) : (
+
+            <section className="timeline-card">
+
+                <div className="history-card-header">
+
+                    <div>
+                        <span className="section-eyebrow">
+                            AUDIT TRAIL
+                        </span>
+
+                        <h2>Activity Timeline</h2>
+                    </div>
+
+                    <span className="auditor-count">
+                        {timeline.length} events
+                    </span>
+
+                </div>
+
+
+                <div className="timeline-list">
+
+                    {timeline.map((event) => (
+
+                        <article
+                            className="timeline-event"
+                            key={event.id}
+                        >
+
+                            <div className="timeline-marker">
+                                <span></span>
+                            </div>
+
+                            <div className="timeline-event-content">
+
+                                <div className="timeline-event-top">
+
+                                    <div>
+                                        <span className="section-eyebrow">
+                                            {event.action}
+                                        </span>
+
+                                        <h3>
+                                            {event.old_status || "Initial"}
+                                            {" → "}
+                                            {event.new_status || "-"}
+                                        </h3>
+                                    </div>
+
+                                    <time>
+                                        {formatDate(
+                                            event.created_at
+                                        )}
+                                    </time>
+
+                                </div>
+
+
+                                <div className="timeline-event-meta">
+
+                                    <span>
+                                        Actor
+                                        <strong>
+                                            {event.actor_name || "-"}
+                                        </strong>
+                                    </span>
+
+                                    <span>
+                                        Role
+                                        <strong>
+                                            {event.actor_role || "-"}
+                                        </strong>
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                        </article>
+
+                    ))}
+
+                </div>
+
+            </section>
+
+        )}
+
+    </div>
+)};

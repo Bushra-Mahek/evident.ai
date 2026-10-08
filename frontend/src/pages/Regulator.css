@@ -1,0 +1,582 @@
+/* =========================================================
+   EVIDENT.AI — REGULATOR
+   ========================================================= */
+
+.regulator-page {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding-bottom: 48px;
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.regulator-header {
+    padding: 30px 0 26px;
+    margin-bottom: 30px;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.regulator-title-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 25px;
+    margin-top: 7px;
+}
+
+.regulator-title-row h1 {
+    margin: 0 0 8px;
+    color: var(--text-primary);
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: -0.035em;
+}
+
+.regulator-title-row p {
+    max-width: 700px;
+    margin: 0;
+    color: var(--text-muted);
+    line-height: 1.6;
+}
+
+.regulator-record-count {
+    padding: 8px 12px;
+    border: 1px solid var(--border-light);
+    border-radius: 999px;
+    background: var(--bg-subtle);
+    color: var(--text-secondary);
+    font-size: 0.7rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   DISCLOSURE TABLE
+   ========================================================= */
+
+.regulator-table-card {
+    overflow: hidden;
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-lg);
+    background: #fff;
+    box-shadow: var(--shadow-sm);
+}
+
+.regulator-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    padding: 21px 22px;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.regulator-card-header h2 {
+    margin: 0;
+    color: var(--text-primary);
+    font-size: 1.05rem;
+}
+
+.regulator-card-header p {
+    margin: 5px 0 0;
+    color: var(--text-muted);
+    font-size: 0.75rem;
+}
+
+.regulator-table th {
+    white-space: nowrap;
+}
+
+.regulator-table td {
+    vertical-align: middle;
+}
+
+.regulator-action-cell {
+    text-align: right;
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   DETAIL META
+   ========================================================= */
+
+.regulator-detail-meta {
+    display: flex;
+    gap: 42px;
+    padding-top: 20px;
+}
+
+.regulator-detail-meta div {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.regulator-detail-meta span {
+    color: var(--text-muted);
+    font-size: 0.63rem;
+    font-weight: 700;
+    letter-spacing: 0.09em;
+}
+
+.regulator-detail-meta strong {
+    color: var(--text-primary);
+    font-size: 0.8rem;
+}
+
+
+/* =========================================================
+   SECTIONS
+   ========================================================= */
+
+.regulator-section {
+    margin-bottom: 30px;
+}
+
+.regulator-section-heading {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 16px;
+}
+
+.regulator-section-number {
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    background: #fff;
+    color: var(--text-muted);
+    font-size: 0.72rem;
+    font-weight: 700;
+}
+
+.regulator-section-heading > div:nth-child(2) {
+    flex: 1;
+}
+
+.regulator-section-heading h2 {
+    margin: 0;
+    color: var(--text-primary);
+    font-size: 1.2rem;
+}
+
+.regulator-section-heading p {
+    margin: 5px 0 0;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+}
+
+
+/* =========================================================
+   DATA POINTS
+   ========================================================= */
+
+.regulator-data-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.regulator-data-card {
+    padding: 18px;
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-lg);
+    background: #fff;
+    box-shadow: var(--shadow-sm);
+}
+
+.regulator-data-heading span {
+    display: block;
+    margin-bottom: 5px;
+    color: var(--text-muted);
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.09em;
+}
+
+.regulator-data-heading h3 {
+    margin: 0;
+    color: var(--text-primary);
+    font-size: 0.95rem;
+}
+
+.regulator-data-values {
+    display: grid;
+    grid-template-columns: 0.8fr 0.7fr 1.5fr;
+    gap: 18px;
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border-light);
+}
+
+.regulator-data-values div {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.regulator-data-values span,
+.regulator-result-item span,
+.regulator-validation-item span {
+    color: var(--text-muted);
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+}
+
+.regulator-data-values strong {
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+}
+
+
+/* =========================================================
+   VERIFICATION CARDS
+   ========================================================= */
+
+.regulator-verification-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+    margin-bottom: 30px;
+}
+
+.regulator-card {
+    min-width: 0;
+    padding: 20px;
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-lg);
+    background: #fff;
+    box-shadow: var(--shadow-sm);
+}
+
+.regulator-card-heading {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 17px;
+}
+
+.regulator-card-heading h2 {
+    margin: 0;
+    color: var(--text-primary);
+    font-size: 1rem;
+}
+
+.regulator-card-icon {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9px;
+    font-weight: 800;
+}
+
+.regulator-card-icon.success {
+    background: var(--success-bg);
+    color: var(--brand-accent-dark);
+}
+
+.regulator-card-icon.info {
+    background: var(--info-bg);
+    color: var(--color-info);
+}
+
+
+/* =========================================================
+   RESULTS
+   ========================================================= */
+
+.regulator-result-list,
+.regulator-validation-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.regulator-result-item {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    padding: 12px;
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-md);
+}
+
+.regulator-result-item div {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.regulator-result-item strong {
+    color: var(--text-primary);
+    font-size: 0.76rem;
+}
+
+.regulator-validation-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 11px;
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-md);
+}
+
+.regulator-validation-item strong {
+    color: var(--text-secondary);
+    font-size: 0.72rem;
+}
+
+.regulator-validation-item span {
+    padding: 4px 7px;
+    border-radius: 999px;
+    background: var(--success-bg);
+    color: var(--brand-accent-dark);
+}
+
+
+/* =========================================================
+   BLOCKCHAIN
+   ========================================================= */
+
+.regulator-blockchain-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 11px;
+}
+
+.regulator-blockchain-card {
+    padding: 16px;
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-md);
+    background: #fff;
+}
+
+.regulator-blockchain-card > span {
+    color: var(--text-muted);
+    font-size: 0.61rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+}
+
+.regulator-blockchain-card code {
+    display: block;
+    margin-top: 8px;
+    padding: 10px;
+    overflow-x: auto;
+    border-radius: 7px;
+    background: var(--bg-subtle);
+    color: var(--text-secondary);
+    font-family: monospace;
+    font-size: 0.67rem;
+}
+
+
+/* =========================================================
+   EVIDENCE
+   ========================================================= */
+
+.regulator-evidence-card {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    padding: 15px 16px;
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-md);
+    background: #fff;
+}
+
+.regulator-evidence-icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9px;
+    background: var(--info-bg);
+    color: var(--color-info);
+    font-size: 0.58rem;
+    font-weight: 800;
+}
+
+.regulator-evidence-card div:nth-child(2) {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.regulator-evidence-card strong {
+    color: var(--text-primary);
+    font-size: 0.8rem;
+}
+
+.regulator-evidence-card span {
+    color: var(--text-muted);
+    font-size: 0.68rem;
+}
+
+
+/* =========================================================
+   EMPTY STATES
+   ========================================================= */
+
+.regulator-empty {
+    padding: 55px 25px;
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-lg);
+    background: #fff;
+    text-align: center;
+}
+
+.regulator-empty-icon {
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 12px;
+    border-radius: 10px;
+    background: var(--bg-subtle);
+    color: var(--text-muted);
+    font-weight: 700;
+}
+
+.regulator-empty h2 {
+    margin: 0 0 5px;
+    color: var(--text-primary);
+    font-size: 1rem;
+}
+
+.regulator-empty p {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 0.75rem;
+}
+
+.regulator-empty-inline {
+    padding: 17px;
+    border: 1px dashed var(--border-color);
+    border-radius: var(--radius-md);
+    background: var(--bg-subtle);
+    color: var(--text-muted);
+    font-size: 0.75rem;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 850px) {
+
+    .regulator-verification-grid,
+    .regulator-blockchain-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+@media (max-width: 650px) {
+
+    .regulator-title-row {
+        flex-direction: column;
+    }
+
+    .regulator-detail-meta {
+        flex-wrap: wrap;
+        gap: 18px 25px;
+    }
+
+    .regulator-section-heading {
+        flex-wrap: wrap;
+    }
+
+    .regulator-data-values {
+        grid-template-columns: 1fr;
+    }
+
+    .regulator-card-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+}
+
+/* validation n cross verification */
+.regulator-validation-item {
+    display: block;
+}
+
+.regulator-validation-item > div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+}
+
+.regulator-validation-item p {
+    margin: 7px 0 0;
+    color: var(--text-muted);
+    font-size: 0.7rem;
+    line-height: 1.5;
+}
+
+.regulator-validation-item span {
+    flex-shrink: 0;
+}
+
+/*blockchain-css*/
+.blockchain-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 1px solid var(--border-light);
+}
+
+.blockchain-meta span {
+    color: var(--text-muted);
+    font-size: 0.58rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+}
+
+.blockchain-meta strong {
+    color: var(--text-secondary);
+    font-size: 0.72rem;
+}
+
+/*regulator-evidence */
+.regulator-evidence-list {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+}
+
+.regulator-evidence-card {
+    justify-content: flex-start;
+}
+
+.evidence-available {
+    margin-left: auto;
+    padding: 5px 8px;
+    border-radius: 999px;
+    background: var(--success-bg);
+    color: var(--brand-accent-dark);
+    font-size: 0.6rem;
+    font-weight: 700;
+}

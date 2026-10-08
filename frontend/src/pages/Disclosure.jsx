@@ -25,7 +25,7 @@ import {
     getDataPointsByDisclosure,
     updateDataPoint
 } from "../api/dataPointApi.js";
-
+import "./Disclosure.css";
 
 export function Disclosure() {
 
@@ -613,1021 +613,1073 @@ async function handleRunValidation() {
     // LOADING / ERROR STATES
     // =========================
 
-    if (loading) {
-
-        return (
-            <p>
-                Loading disclosure details...
-            </p>
-        );
-
-    }
-
-
-    if (error) {
-
-        return (
-            <p style={{ color: "red" }}>
-                {error}
-            </p>
-        );
-
-    }
-
-
-    if (!disclosure) {
-
-        return (
-            <p>
-                No disclosure found.
-            </p>
-        );
-
-    }
-
-
-    // =========================
-    // DISCLOSURE STATUS
-    // =========================
-
-    const isDraft =
-        disclosure.status === "DRAFT";
-
-
-    // =========================
+        // =========================
     // UI
     // =========================
 
+    if (loading) {
+        return (
+            <div className="page-state">
+                <div className="loading-spinner"></div>
+                <p>Loading disclosure...</p>
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="page-state page-state-error">
+                <h2>Unable to load disclosure</h2>
+                <p>{error}</p>
+            </div>
+        );
+    }
+
+    if (!disclosure) {
+        return (
+            <div className="page-state">
+                <p>No disclosure found.</p>
+            </div>
+        );
+    }
+
+    const isDraft = disclosure.status === "DRAFT";
+
     return (
+        <div className="disclosure-page">
 
-        <div
-            style={{
-                padding: "20px",
-                border: "1px solid #ccc",
-                borderRadius: "5px",
-                maxWidth: "900px",
-                margin: "0 auto"
-            }}
-        >
+            {/* =========================
+                HEADER
+            ========================= */}
 
-            <h2>
-                Disclosure Details
-            </h2>
+            <section className="disclosure-header">
 
-            <hr />
+                <div className="disclosure-header-main">
+
+                    <span className="page-eyebrow">
+                        ESG REPORTING
+                    </span>
+
+                    <div className="disclosure-title-row">
+                        <div>
+                            <h1>
+                                {disclosure.reporting_year} Disclosure
+                            </h1>
+
+                            <p>
+                                Prepare, verify and submit your organization's
+                                ESG reporting data for formal audit.
+                            </p>
+                        </div>
+
+                        <span
+                            className={`status-badge status-${disclosure.status.toLowerCase()}`}
+                        >
+                            <span className="status-dot"></span>
+                            {disclosure.status}
+                        </span>
+                    </div>
+
+                </div>
+
+                <div className="disclosure-meta">
+
+                    <div className="disclosure-meta-item">
+                        <span>REPORTING YEAR</span>
+                        <strong>{disclosure.reporting_year}</strong>
+                    </div>
+
+                    <div className="disclosure-meta-item">
+                        <span>CREATED</span>
+                        <strong>
+                            {disclosure.created_at
+                                ? new Date(
+                                    disclosure.created_at
+                                ).toLocaleDateString()
+                                : "N/A"}
+                        </strong>
+                    </div>
+
+                    <div className="disclosure-meta-item">
+                        <span>WORKFLOW</span>
+                        <strong>
+                            {isDraft ? "Editing" : "Under Review"}
+                        </strong>
+                    </div>
+
+                </div>
+
+            </section>
 
 
             {/* =========================
-                DISCLOSURE INFORMATION
+                DATA POINTS
             ========================= */}
 
-            <p>
-                <strong>
-                    Reporting Year:
-                </strong>{" "}
-                {disclosure.reporting_year}
-            </p>
+            <section className="workspace-section">
+
+                <div className="workspace-section-header">
+
+                    <div className="section-title-group">
+
+                        <div className="section-number">
+                            01
+                        </div>
+
+                        <div>
+                            <span className="section-eyebrow">
+                                REPORTING DATA
+                            </span>
+
+                            <h2>Data Points</h2>
+
+                            <p>
+                                Report the measurable ESG values associated
+                                with this disclosure period.
+                            </p>
+                        </div>
+
+                    </div>
+
+                    {isDraft && !showAddBtn && (
+                        <button
+                            className="btn btn-primary"
+                            onClick={() => setShowAddBtn(true)}
+                        >
+                            + Add Data Point
+                        </button>
+                    )}
+
+                </div>
 
 
-            <p>
-                <strong>
-                    Status:
-                </strong>{" "}
-                {disclosure.status}
-            </p>
+                {/* ADD DATA POINT */}
 
+                {showAddBtn && (
 
-            <p>
-                <strong>
-                    Created:
-                </strong>{" "}
-
-                {
-                    disclosure.created_at
-                        ? new Date(
-                            disclosure.created_at
-                        ).toLocaleDateString()
-                        : "N/A"
-                }
-
-            </p>
-
-
-            {/* =========================
-                1. DATA POINTS
-            ========================= */}
-
-            <hr
-                style={{
-                    border: "0",
-                    borderTop: "1px solid #eee",
-                    margin: "16px 0"
-                }}
-            />
-
-
-            <div
-                style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center"
-                }}
-            >
-
-                <h3
-                    style={{
-                        textTransform: "uppercase",
-                        margin: 0
-                    }}
-                >
-                    Data Points
-                </h3>
-
-
-                {isDraft && !showAddBtn && (
-
-                    <button
-                        onClick={() => setShowAddBtn(true)}
+                    <form
+                        className="disclosure-form-card"
+                        onSubmit={handleAddDataPoint}
                     >
-                        + Add Data Point
-                    </button>
+
+                        <div className="form-card-header">
+
+                            <div>
+                                <span className="section-eyebrow">
+                                    NEW ENTRY
+                                </span>
+
+                                <h3>Add Data Point</h3>
+                            </div>
+
+                            <button
+                                type="button"
+                                className="icon-close"
+                                onClick={() => {
+                                    setShowAddBtn(false);
+
+                                    setBufferForm({
+                                        metricId: "",
+                                        value: "",
+                                        periodStart: "",
+                                        periodEnd: ""
+                                    });
+                                }}
+                            >
+                                ×
+                            </button>
+
+                        </div>
+
+
+                        <div className="disclosure-form-grid">
+
+                            <div className="form-field form-field-wide">
+
+                                <label htmlFor="metric">
+                                    Metric
+                                </label>
+
+                                <select
+                                    id="metric"
+                                    value={bufferForm.metricId}
+                                    onChange={e =>
+                                        setBufferForm({
+                                            ...bufferForm,
+                                            metricId: e.target.value
+                                        })
+                                    }
+                                    required
+                                >
+                                    <option value="">
+                                        Select a metric
+                                    </option>
+
+                                    {metrics.map(metric => (
+                                        <option
+                                            key={metric.id}
+                                            value={metric.id}
+                                        >
+                                            {metric.metric_name}
+                                        </option>
+                                    ))}
+                                </select>
+
+                                <span className="field-help">
+                                    Select the ESG metric being reported.
+                                </span>
+
+                            </div>
+
+
+                            <div className="form-field">
+
+                                <label htmlFor="value">
+                                    Reported Value
+                                </label>
+
+                                <input
+                                    id="value"
+                                    type="number"
+                                    required
+                                    value={bufferForm.value}
+                                    onChange={e =>
+                                        setBufferForm({
+                                            ...bufferForm,
+                                            value: e.target.value
+                                        })
+                                    }
+                                />
+
+                            </div>
+
+
+                            <div className="form-field">
+
+                                <label>Unit</label>
+
+                                <div className="readonly-field">
+                                    {bufferForm.metricId
+                                        ? metrics.find(
+                                            metric =>
+                                                metric.id ===
+                                                bufferForm.metricId
+                                        )?.unit
+                                        : "Select a metric"}
+                                </div>
+
+                            </div>
+
+
+                            <div className="form-field">
+
+                                <label htmlFor="periodStart">
+                                    Reporting Period From
+                                </label>
+
+                                <input
+                                    id="periodStart"
+                                    type="date"
+                                    required
+                                    value={bufferForm.periodStart}
+                                    onChange={e =>
+                                        setBufferForm({
+                                            ...bufferForm,
+                                            periodStart: e.target.value
+                                        })
+                                    }
+                                />
+
+                            </div>
+
+
+                            <div className="form-field">
+
+                                <label htmlFor="periodEnd">
+                                    Reporting Period To
+                                </label>
+
+                                <input
+                                    id="periodEnd"
+                                    type="date"
+                                    required
+                                    value={bufferForm.periodEnd}
+                                    onChange={e =>
+                                        setBufferForm({
+                                            ...bufferForm,
+                                            periodEnd: e.target.value
+                                        })
+                                    }
+                                />
+
+                            </div>
+
+                        </div>
+
+
+                        <div className="form-card-actions">
+
+                            <button
+                                type="button"
+                                className="btn btn-secondary"
+                                onClick={() => {
+                                    setShowAddBtn(false);
+
+                                    setBufferForm({
+                                        metricId: "",
+                                        value: "",
+                                        periodStart: "",
+                                        periodEnd: ""
+                                    });
+                                }}
+                            >
+                                Cancel
+                            </button>
+
+                            <button
+                                type="submit"
+                                className="btn btn-primary"
+                            >
+                                Add Data Point
+                            </button>
+
+                        </div>
+
+                    </form>
+                )}
+
+
+                {/* EXISTING DATA POINTS */}
+
+                <div className="data-points-list">
+
+                    {dataPoints.length === 0 ? (
+
+                        <div className="workspace-empty-state">
+                            <div className="workspace-empty-icon">
+                                +
+                            </div>
+
+                            <h3>No data points yet</h3>
+
+                            <p>
+                                Add the ESG metrics that belong to this
+                                reporting period.
+                            </p>
+                        </div>
+
+                    ) : (
+
+                        dataPoints.map(dp => {
+
+                            const metric = metrics.find(
+                                metric => metric.id === dp.metric_id
+                            );
+
+                            const metricName =
+                                metric?.metric_name || "Unknown metric";
+
+                            const metricUnit =
+                                metric?.unit || dp.unit || "N/A";
+
+                            const isEditing =
+                                editDataPointId === dp.id;
+
+                            return (
+                                <article
+                                    className={`data-point-card ${
+                                        isEditing
+                                            ? "data-point-card-editing"
+                                            : ""
+                                    }`}
+                                    key={dp.id}
+                                >
+
+                                    {!isEditing ? (
+
+                                        <>
+                                            <div className="data-point-main">
+
+                                                <div className="data-point-heading">
+
+                                                    <span className="data-point-label">
+                                                        ESG METRIC
+                                                    </span>
+
+                                                    <h3>
+                                                        {metricName}
+                                                    </h3>
+
+                                                </div>
+
+                                                <span className="verification-chip">
+                                                    <span>✓</span>
+                                                    Verified
+                                                </span>
+
+                                            </div>
+
+
+                                            <div className="data-point-details">
+
+                                                <div className="data-point-value">
+
+                                                    <span>REPORTED VALUE</span>
+
+                                                    <strong>
+                                                        {dp.value}
+                                                        <small>
+                                                            {metricUnit}
+                                                        </small>
+                                                    </strong>
+
+                                                </div>
+
+
+                                                <div className="data-point-detail">
+
+                                                    <span>REPORTING PERIOD</span>
+
+                                                    <strong>
+                                                        {dp.period_start}
+                                                        {" → "}
+                                                        {dp.period_end}
+                                                    </strong>
+
+                                                </div>
+
+
+                                                <div className="data-point-detail">
+
+                                                    <span>UNIT</span>
+
+                                                    <strong>
+                                                        {metricUnit}
+                                                    </strong>
+
+                                                </div>
+
+                                            </div>
+
+
+                                            {isDraft && (
+
+                                                <div className="data-point-actions">
+
+                                                    <button
+                                                        className="btn btn-secondary btn-small"
+                                                        onClick={() =>
+                                                            startInlineEdit(dp)
+                                                        }
+                                                    >
+                                                        Edit
+                                                    </button>
+
+                                                </div>
+
+                                            )}
+
+                                        </>
+
+                                    ) : (
+
+                                        <>
+
+                                            <div className="data-point-edit-header">
+
+                                                <div>
+                                                    <span className="section-eyebrow">
+                                                        EDITING DATA POINT
+                                                    </span>
+
+                                                    <h3>
+                                                        {metricName}
+                                                    </h3>
+                                                </div>
+
+                                                <span className="verification-chip">
+                                                    <span>✓</span>
+                                                    Cross-verified
+                                                </span>
+
+                                            </div>
+
+
+                                            <div className="disclosure-form-grid">
+
+                                                <div className="form-field">
+
+                                                    <label>
+                                                        Value
+                                                    </label>
+
+                                                    <input
+                                                        type="number"
+                                                        value={
+                                                            editBufferForm.value
+                                                        }
+                                                        onChange={e =>
+                                                            setEditBufferForm({
+                                                                ...editBufferForm,
+                                                                value:
+                                                                    e.target.value
+                                                            })
+                                                        }
+                                                    />
+
+                                                </div>
+
+
+                                                <div className="form-field">
+
+                                                    <label>
+                                                        Unit
+                                                    </label>
+
+                                                    <div className="readonly-field">
+                                                        {metricUnit}
+                                                    </div>
+
+                                                </div>
+
+
+                                                <div className="form-field">
+
+                                                    <label>
+                                                        From
+                                                    </label>
+
+                                                    <input
+                                                        type="date"
+                                                        value={
+                                                            editBufferForm.periodStart
+                                                        }
+                                                        onChange={e =>
+                                                            setEditBufferForm({
+                                                                ...editBufferForm,
+                                                                periodStart:
+                                                                    e.target.value
+                                                            })
+                                                        }
+                                                    />
+
+                                                </div>
+
+
+                                                <div className="form-field">
+
+                                                    <label>
+                                                        To
+                                                    </label>
+
+                                                    <input
+                                                        type="date"
+                                                        value={
+                                                            editBufferForm.periodEnd
+                                                        }
+                                                        onChange={e =>
+                                                            setEditBufferForm({
+                                                                ...editBufferForm,
+                                                                periodEnd:
+                                                                    e.target.value
+                                                            })
+                                                        }
+                                                    />
+
+                                                </div>
+
+                                            </div>
+
+
+                                            <div className="form-card-actions">
+
+                                                <button
+                                                    type="button"
+                                                    className="btn btn-secondary"
+                                                    onClick={cancelInlineEdit}
+                                                >
+                                                    Cancel
+                                                </button>
+
+                                                <button
+                                                    type="button"
+                                                    className="btn btn-primary"
+                                                    onClick={() =>
+                                                        handleSaveInlineEdit(
+                                                            dp.id
+                                                        )
+                                                    }
+                                                >
+                                                    Save Changes
+                                                </button>
+
+                                            </div>
+
+                                        </>
+
+                                    )}
+
+                                </article>
+                            );
+                        })
+
+                    )}
+
+                </div>
+
+            </section>
+
+
+            {/* =========================
+                EVIDENCE
+            ========================= */}
+
+            <section className="workspace-section">
+
+                <div className="workspace-section-header">
+
+                    <div className="section-title-group">
+
+                        <div className="section-number">
+                            02
+                        </div>
+
+                        <div>
+                            <span className="section-eyebrow">
+                                SUPPORTING DOCUMENTATION
+                            </span>
+
+                            <h2>Evidence</h2>
+
+                            <p>
+                                Attach documents that substantiate the
+                                reported ESG values.
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <span className="section-count">
+                        {documents.length}{" "}
+                        {documents.length === 1
+                            ? "document"
+                            : "documents"}
+                    </span>
+
+                </div>
+
+
+                {isDraft && (
+
+                    <form
+                        className="evidence-upload-card"
+                        onSubmit={handleDocumentUpload}
+                    >
+
+                        <div className="upload-icon">
+                            ↑
+                        </div>
+
+                        <div className="upload-content">
+
+                            <h3>
+                                Upload supporting evidence
+                            </h3>
+
+                            <p>
+                                Add PDF, CSV or Excel documentation
+                                supporting this disclosure.
+                            </p>
+
+                            <input
+                                id="evidenceFile"
+                                type="file"
+                                accept=".pdf,.csv,.xls,.xlsx"
+                                onChange={event =>
+                                    setSelectedFile(
+                                        event.target.files[0]
+                                    )
+                                }
+                            />
+
+                        </div>
+
+                        <button
+                            type="submit"
+                            className="btn btn-primary"
+                            disabled={uploadingDocument}
+                        >
+                            {uploadingDocument
+                                ? "Uploading..."
+                                : "Upload Evidence"}
+                        </button>
+
+                    </form>
 
                 )}
 
-            </div>
+
+                <div className="documents-list">
+
+                    {documents.length === 0 ? (
+
+                        <div className="workspace-empty-state">
+                            <div className="workspace-empty-icon">
+                                ↗
+                            </div>
+
+                            <h3>No evidence uploaded</h3>
+
+                            <p>
+                                Supporting documents will appear here
+                                once uploaded.
+                            </p>
+                        </div>
+
+                    ) : (
+
+                        documents.map(doc => (
+
+                            <article
+                                className="document-card"
+                                key={doc.id}
+                            >
+
+                                <div className="document-icon">
+                                    DOC
+                                </div>
+
+                                <div className="document-info">
+
+                                    <h3>
+                                        {doc.file_name}
+                                    </h3>
+
+                                    <div className="document-meta">
+
+                                        <span>
+                                            {doc.file_type ||
+                                                "Document"}
+                                        </span>
+
+                                        <span>•</span>
+
+                                        <span>
+                                            Uploaded{" "}
+                                            {doc.uploaded_at
+                                                ? new Date(
+                                                    doc.uploaded_at
+                                                ).toLocaleDateString()
+                                                : "N/A"}
+                                        </span>
+
+                                    </div>
+
+                                </div>
+
+                                <button
+                                    className="btn btn-secondary btn-small"
+                                    onClick={() =>
+                                        handleViewDocument(doc)
+                                    }
+                                >
+                                    View Document →
+                                </button>
+
+                            </article>
+
+                        ))
+
+                    )}
+
+                </div>
+
+            </section>
 
 
             {/* =========================
-                ADD DATA POINT FORM
+                VERIFICATION
             ========================= */}
 
-            {showAddBtn && (
-
-                <form
-                    onSubmit={handleAddDataPoint}
-
-                    style={{
-                        padding: "12px",
-                        background: "#f9f9f9",
-                        marginTop: "12px",
-                        border: "1px dashed #bbb"
-                    }}
-                >
-
-                    {/* METRIC */}
-
-                    <div>
-
-                        <label>
-                            Metric:
-                        </label>
-
-                        {" "}
-
-                        <select
-                            value={bufferForm.metricId}
-
-                            onChange={e =>
-                                setBufferForm({
-                                    ...bufferForm,
-                                    metricId: e.target.value
-                                })
-                            }
-
-                            required
-                        >
-
-                            <option value="">
-                                Select a metric
-                            </option>
+            <section className="verification-grid">
 
 
-                            {metrics.map(metric => (
+                {/* CROSS VERIFICATION */}
 
-                                <option
-                                    key={metric.id}
-                                    value={metric.id}
+                <article className="verification-card">
+
+                    <div className="verification-card-header">
+
+                        <div className="verification-card-icon">
+                            ✓
+                        </div>
+
+                        <div>
+                            <span className="section-eyebrow">
+                                SOURCE CHECK
+                            </span>
+
+                            <h2>Cross-Verification</h2>
+                        </div>
+
+                    </div>
+
+
+                    {crossVerificationResults.length === 0 ? (
+
+                        <div className="verification-empty">
+                            <p>
+                                Cross-verification results will appear
+                                after data points are submitted.
+                            </p>
+                        </div>
+
+                    ) : (
+
+                        <div className="cross-verification-list">
+
+                            {crossVerificationResults.map(result => (
+
+                                <div
+                                    className="cross-verification-item"
+                                    key={result.id}
                                 >
-                                    {metric.metric_name}
-                                </option>
+
+                                    <div className="cross-result-header">
+
+                                        <strong>
+                                            Data Point
+                                        </strong>
+
+                                        <span
+                                            className={
+                                                result.verification_status ===
+                                                "VERIFIED"
+                                                    ? "result-status result-status-success"
+                                                    : "result-status result-status-danger"
+                                            }
+                                        >
+                                            {result.verification_status}
+                                        </span>
+
+                                    </div>
+
+                                    <div className="cross-result-values">
+
+                                        <div>
+                                            <span>
+                                                COMPANY VALUE
+                                            </span>
+
+                                            <strong>
+                                                {result.company_value ??
+                                                    "N/A"}
+                                            </strong>
+                                        </div>
+
+                                        <div>
+                                            <span>
+                                                EXTERNAL VALUE
+                                            </span>
+
+                                            <strong>
+                                                {result.external_value ??
+                                                    "N/A"}
+                                            </strong>
+                                        </div>
+
+                                    </div>
+
+                                </div>
 
                             ))}
 
-                        </select>
+                        </div>
+
+                    )}
+
+                </article>
+
+
+                {/* VALIDATION */}
+
+                <article className="verification-card">
+
+                    <div className="verification-card-header">
+
+                        <div className="verification-card-icon validation-icon">
+                            ✓
+                        </div>
+
+                        <div>
+                            <span className="section-eyebrow">
+                                AUTOMATED CHECKS
+                            </span>
+
+                            <h2>Validation</h2>
+                        </div>
 
                     </div>
 
 
-                    {/* VALUE */}
-
-                    <div>
-
-                        <label>
-                            Value:
-                        </label>
-
-                        {" "}
-
-                        <input
-                            type="number"
-                            required
-                            value={bufferForm.value}
-
-                            onChange={e =>
-                                setBufferForm({
-                                    ...bufferForm,
-                                    value: e.target.value
-                                })
-                            }
-                        />
-
-                    </div>
-
-
-                    {/* UNIT */}
-
-                    {bufferForm.metricId && (
+                    <div className="validation-action">
 
                         <p>
-
-                            <strong>
-                                Unit:
-                            </strong>{" "}
-
-                            {
-                                metrics.find(
-                                    metric =>
-                                        metric.id ===
-                                        bufferForm.metricId
-                                )?.unit
-                            }
-
+                            Run the automated validation engine to
+                            check completeness, consistency, evidence
+                            and reporting rules.
                         </p>
+
+                        <button
+                            type="button"
+                            className="btn btn-primary"
+                            onClick={handleRunValidation}
+                            disabled={validationLoading}
+                        >
+                            {validationLoading
+                                ? "Running Validation..."
+                                : "Run Validation"}
+                        </button>
+
+                    </div>
+
+
+                    {validationSummary && (
+
+                        <div className="validation-summary">
+
+                            <div className="validation-summary-item validation-pass">
+                                <span>Passed</span>
+                                <strong>
+                                    {validationSummary.passed}
+                                </strong>
+                            </div>
+
+                            <div className="validation-summary-item validation-warning">
+                                <span>Warnings</span>
+                                <strong>
+                                    {validationSummary.warnings}
+                                </strong>
+                            </div>
+
+                            <div className="validation-summary-item validation-fail">
+                                <span>Failed</span>
+                                <strong>
+                                    {validationSummary.failed}
+                                </strong>
+                            </div>
+
+                            <div className="validation-overall">
+
+                                <span>Overall Result</span>
+
+                                <strong>
+                                    {validationSummary.failed === 0
+                                        ? "VALID"
+                                        : "FAILED"}
+                                </strong>
+
+                            </div>
+
+                        </div>
 
                     )}
 
 
-                    {/* PERIOD START */}
+                    {validationResults.length > 0 && (
 
-                    <div>
+                        <div className="validation-results">
 
-                        <label>
-                            Reporting Period From:
-                        </label>
+                            {validationResults.map(result => (
 
-                        {" "}
+                                <div
+                                    className="validation-result"
+                                    key={
+                                        result.id ||
+                                        result.ruleCode
+                                    }
+                                >
 
-                        <input
-                            type="date"
-                            required
-                            value={bufferForm.periodStart}
+                                    <div className="validation-result-top">
 
-                            onChange={e =>
-                                setBufferForm({
-                                    ...bufferForm,
-                                    periodStart:
-                                        e.target.value
-                                })
-                            }
-                        />
+                                        <strong>
+                                            {result.ruleCode}
+                                        </strong>
 
-                    </div>
-
-
-                    {/* PERIOD END */}
-
-                    <div>
-
-                        <label>
-                            Reporting Period To:
-                        </label>
-
-                        {" "}
-
-                        <input
-                            type="date"
-                            required
-                            value={bufferForm.periodEnd}
-
-                            onChange={e =>
-                                setBufferForm({
-                                    ...bufferForm,
-                                    periodEnd:
-                                        e.target.value
-                                })
-                            }
-                        />
-
-                    </div>
-
-
-                    <br />
-
-
-                    <button type="submit">
-                        Add Data Point
-                    </button>
-
-
-                    {" "}
-
-
-                    <button
-                        type="button"
-                        onClick={() => {
-
-                            setShowAddBtn(false);
-
-                            setBufferForm({
-                                metricId: "",
-                                value: "",
-                                periodStart: "",
-                                periodEnd: ""
-                            });
-
-                        }}
-                    >
-                        Cancel
-                    </button>
-
-                </form>
-
-            )}
-
-
-            {/* =========================
-                EXISTING DATA POINTS
-            ========================= */}
-
-            <div
-                style={{
-                    marginTop: "20px"
-                }}
-            >
-
-                {dataPoints.length === 0 ? (
-
-                    <p
-                        style={{
-                            color: "#777"
-                        }}
-                    >
-                        No data points added yet.
-                    </p>
-
-                ) : (
-
-                    dataPoints.map(dp => {
-
-                        // Find metric belonging to this data point
-                        const metric = metrics.find(
-                            metric =>
-                                metric.id === dp.metric_id
-                        );
-
-
-                        const metricName =
-                            metric?.metric_name ||
-                            "Unknown metric";
-
-
-                        const metricUnit =
-                            metric?.unit ||
-                            dp.unit ||
-                            "N/A";
-
-
-                        const isEditing =
-                            editDataPointId === dp.id;
-
-
-                        return (
-
-                            <div
-                                key={dp.id}
-
-                                style={{
-                                    border: "1px solid #ddd",
-                                    padding: "15px",
-                                    marginBottom: "10px",
-                                    borderRadius: "5px"
-                                }}
-                            >
-
-                                {/* =========================
-                                    READ ONLY VIEW
-                                ========================= */}
-
-                                {!isEditing ? (
-
-                                    <>
-
-                                        <p>
-                                            <strong>
-                                                Metric:
-                                            </strong>{" "}
-                                            {metricName}
-                                        </p>
-
-
-                                        <p>
-                                            <strong>
-                                                Value:
-                                            </strong>{" "}
-                                            {dp.value}
-                                        </p>
-
-
-                                        <p>
-                                            <strong>
-                                                Unit:
-                                            </strong>{" "}
-                                            {metricUnit}
-                                        </p>
-
-
-                                        <p>
-                                            <strong>
-                                                Reporting Period:
-                                            </strong>{" "}
-
-                                            {dp.period_start}
-                                            {" → "}
-                                            {dp.period_end}
-
-                                        </p>
-
-
-                                        {isDraft && (
-
-                                            <button
-                                                onClick={() =>
-                                                    startInlineEdit(dp)
-                                                }
-                                            >
-                                                Edit
-                                            </button>
-
-                                        )}
-
-                                    </>
-
-                                ) : (
-
-                                    /* =========================
-                                        EDIT MODE
-                                    ========================= */
-
-                                    <>
-
-                                        <p>
-                                            <strong>
-                                                Metric:
-                                            </strong>{" "}
-                                            {metricName}
-                                        </p>
-
-
-                                        <p>
-                                            <strong>
-                                                Unit:
-                                            </strong>{" "}
-                                            {metricUnit}
-                                        </p>
-
-
-                                        <div>
-
-                                            <label>
-                                                Value:
-                                            </label>
-
-                                            {" "}
-
-                                            <input
-                                                type="number"
-                                                value={
-                                                    editBufferForm.value
-                                                }
-
-                                                onChange={e =>
-                                                    setEditBufferForm({
-                                                        ...editBufferForm,
-                                                        value:
-                                                            e.target.value
-                                                    })
-                                                }
-                                            />
-
-                                        </div>
-
-
-                                        <div>
-
-                                            <label>
-                                                From:
-                                            </label>
-
-                                            {" "}
-
-                                            <input
-                                                type="date"
-                                                value={
-                                                    editBufferForm.periodStart
-                                                }
-
-                                                onChange={e =>
-                                                    setEditBufferForm({
-                                                        ...editBufferForm,
-                                                        periodStart:
-                                                            e.target.value
-                                                    })
-                                                }
-                                            />
-
-                                        </div>
-
-
-                                        <div>
-
-                                            <label>
-                                                To:
-                                            </label>
-
-                                            {" "}
-
-                                            <input
-                                                type="date"
-                                                value={
-                                                    editBufferForm.periodEnd
-                                                }
-
-                                                onChange={e =>
-                                                    setEditBufferForm({
-                                                        ...editBufferForm,
-                                                        periodEnd:
-                                                            e.target.value
-                                                    })
-                                                }
-                                            />
-
-                                        </div>
-
-
-                                        <br />
-
-
-                                        <button
-                                            onClick={() =>
-                                                handleSaveInlineEdit(
-                                                    dp.id
-                                                )
-                                            }
+                                        <span
+                                            className={`validation-severity validation-severity-${result.severity?.toLowerCase()}`}
                                         >
-                                            Save
-                                        </button>
+                                            {result.severity}
+                                        </span>
 
+                                    </div>
 
-                                        {" "}
+                                    <p>
+                                        {result.message}
+                                    </p>
 
+                                </div>
 
-                                        <button
-                                            type="button"
-                                            onClick={
-                                                cancelInlineEdit
-                                            }
-                                        >
-                                            Cancel
-                                        </button>
+                            ))}
 
-                                    </>
+                        </div>
 
-                                )}
+                    )}
 
-                            </div>
+                </article>
 
-                        );
-
-                    })
-
-                )}
-
-            </div>
+            </section>
 
 
             {/* =========================
-                2. EVIDENCE
-            ========================= */}
-
-            <hr
-                style={{
-                    border: "0",
-                    borderTop: "1px solid #eee",
-                    margin: "16px 0"
-                }}
-            />
-
-
-            {/* =========================
-    2. EVIDENCE
-========================= */}
-
-<hr
-    style={{
-        border: "0",
-        borderTop: "1px solid #eee",
-        margin: "16px 0"
-    }}
-/>
-
-
-<div
-    style={{
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center"
-    }}
->
-
-    <h3
-        style={{
-            fontSize: "0.9rem",
-            color: "#444",
-            textTransform: "uppercase",
-            letterSpacing: "0.5px",
-            margin: 0
-        }}
-    >
-        Evidence
-    </h3>
-
-</div>
-
-
-{/* Upload only when DRAFT */}
-
-{isDraft && (
-
-    <form
-        onSubmit={handleDocumentUpload}
-        style={{
-            padding: "12px",
-            background: "#f9f9f9",
-            marginTop: "12px",
-            border: "1px dashed #bbb"
-        }}
-    >
-
-        <div>
-
-            <label htmlFor="evidenceFile">
-                Supporting Document:
-            </label>
-
-            {" "}
-
-            <input
-                id="evidenceFile"
-                type="file"
-                onChange={(event) =>
-                    setSelectedFile(
-                        event.target.files[0]
-                    )
-                }
-            />
-
-        </div>
-
-
-        <br />
-
-
-        <button
-            type="submit"
-            disabled={uploadingDocument}
-        >
-
-            {uploadingDocument
-                ? "Uploading..."
-                : "Upload Evidence"
-            }
-
-        </button>
-
-    </form>
-
-)}
-
-
-{/* Existing documents */}
-
-
-<div
-    style={{
-        marginTop: "15px"
-    }}
->
-
-    {documents.length === 0 ? (
-
-        <p
-            style={{
-                fontSize: "0.95rem",
-                color: "#777"
-            }}
-        >
-            No evidence uploaded yet.
-        </p>
-
-    ) : (
-
-        documents.map(doc => (
-
-            <div
-                key={doc.id}
-                style={{
-                    border: "1px solid #ddd",
-                    padding: "12px",
-                    marginBottom: "10px",
-                    borderRadius: "5px"
-                }}
-            >
-
-                <p>
-                    <strong>
-                        File:
-                    </strong>{" "}
-                    {doc.file_name}
-                </p>
-
-
-                <p>
-                    <strong>
-                        Type:
-                    </strong>{" "}
-                    {doc.file_type || "Unknown"}
-                </p>
-
-
-                <p>
-                    <strong>
-                        Uploaded:
-                    </strong>{" "}
-
-                    {
-                        doc.uploaded_at
-                            ? new Date(
-                                doc.uploaded_at
-                            ).toLocaleDateString()
-                            : "N/A"
-                    }
-
-                </p>
-
-
-                <button
-                    onClick={() =>
-                        handleViewDocument(
-                            doc
-                        )
-                    }
-                >
-                    View Document
-                </button>
-
-            </div>
-
-        ))
-
-    )}
-
-</div>
-
-
-            {/* =========================
-                3. CROSS-VERIFICATION
-            ========================= */}
-
-            <hr
-                style={{
-                    border: "0",
-                    borderTop: "1px solid #eee",
-                    margin: "16px 0"
-                }}
-            />
-
-
-            <h3
-                style={{
-                    fontSize: "0.9rem",
-                    color: "#444",
-                    textTransform: "uppercase",
-                    letterSpacing: "0.5px"
-                }}
-            >
-                Cross-Verification
-            </h3>
-
-
-            {crossVerificationResults.length === 0 ? (
-
-    <p style={{ color: "#777" }}>
-        No cross-verification results available yet.
-    </p>
-
-) : (
-
-    <div>
-
-        {crossVerificationResults.map(result => (
-
-            <div
-                key={result.id}
-                style={{
-                    border: "1px solid #ddd",
-                    padding: "12px",
-                    marginBottom: "10px",
-                    borderRadius: "5px"
-                }}
-            >
-
-                <p>
-                    <strong>Data Point:</strong>{" "}
-                    {result.data_point_id}
-                </p>
-
-                <p>
-                    <strong>Company Value:</strong>{" "}
-                    {result.company_value ?? "N/A"}
-                </p>
-
-                <p>
-                    <strong>External Value:</strong>{" "}
-                    {result.external_value ?? "N/A"}
-                </p>
-
-                <p>
-                    <strong>Status:</strong>{" "}
-                    {result.verification_status}
-                </p>
-
-            </div>
-
-        ))}
-
-    </div>
-    
-)}
-
-
-            {/* =========================
-                4. VALIDATION
-            ========================= */}
-
-            <hr
-                style={{
-                    border: "0",
-                    borderTop: "1px solid #eee",
-                    margin: "16px 0"
-                }}
-            />
-
-
-            <h3
-                style={{
-                    fontSize: "0.9rem",
-                    color: "#444",
-                    textTransform: "uppercase",
-                    letterSpacing: "0.5px"
-                }}
-            >
-                Validation
-            </h3>
-
-
-            <h2>VALIDATION</h2>
-
-<button
-    type="button"
-    onClick={handleRunValidation}
-    disabled={validationLoading}
->
-    {validationLoading
-        ? "Running Validation..."
-        : "Run Validation"}
-</button>
-
-{validationSummary && (
-    <div>
-        <p>
-            <strong>Passed:</strong>{" "}
-            {validationSummary.passed}
-        </p>
-
-        <p>
-            <strong>Warnings:</strong>{" "}
-            {validationSummary.warnings}
-        </p>
-
-        <p>
-            <strong>Failed:</strong>{" "}
-            {validationSummary.failed}
-        </p>
-
-        <p>
-            <strong>Overall:</strong>{" "}
-            {validationSummary.failed === 0
-                ? "VALID"
-                : "FAILED"}
-        </p>
-    </div>
-)}
-
-{validationResults.length > 0 && (
-    <div>
-        {validationResults.map((result) => (
-            <div key={result.id || result.ruleCode}>
-                <strong>
-                    {result.ruleCode}
-                </strong>
-
-                {" — "}
-
-                {result.severity}
-
-                <p>
-                    {result.message}
-                </p>
-            </div>
-        ))}
-    </div>
-)}
-
-
-            {/* =========================
-                DISCLOSURE ACTIONS
+                SUBMISSION ACTIONS
             ========================= */}
 
             {isDraft && (
 
-                <>
+                <section className="submission-panel">
 
-                    <hr
-                        style={{
-                            border: "0",
-                            borderTop: "1px solid #eee",
-                            margin: "24px 0 16px 0"
-                        }}
-                    />
+                    <div>
 
+                        <span className="section-eyebrow">
+                            READY FOR REVIEW?
+                        </span>
 
-                    <div
-                        style={{
-                            display: "flex",
-                            justifyContent: "flex-end",
-                            gap: "12px"
-                        }}
-                    >
+                        <h2>
+                            Submit this disclosure for audit
+                        </h2>
+
+                        <p>
+                            Once submitted, editing will be disabled
+                            while the disclosure is reviewed by an
+                            authorized auditor.
+                        </p>
+
+                    </div>
+
+                    <div className="submission-actions">
 
                         <button
+                            className="btn btn-danger-outline"
                             onClick={handleDelete}
-
-                            style={{
-                                backgroundColor: "#fff",
-                                color: "#d9383a",
-                                border: "1px solid #d9383a",
-                                padding: "8px 16px",
-                                borderRadius: "4px",
-                                cursor: "pointer"
-                            }}
                         >
                             Delete Draft
                         </button>
 
-
                         <button
+                            className="btn btn-primary btn-submit"
                             onClick={handleSubmitForAudit}
-
-                            style={{
-                                backgroundColor: "#0066cc",
-                                color: "#fff",
-                                border: "none",
-                                padding: "8px 16px",
-                                borderRadius: "4px",
-                                cursor: "pointer"
-                            }}
                         >
                             Submit for Audit
+                            <span>→</span>
                         </button>
 
                     </div>
 
-                </>
+                </section>
 
             )}
 
         </div>
-
     );
-
 }
