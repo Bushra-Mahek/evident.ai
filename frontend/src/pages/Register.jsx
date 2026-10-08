@@ -1,84 +1,215 @@
-import { useState } from 'react';
-import { authApiRegister } from '../api/authApi.js';
+import { useState } from "react";
+import { authApiRegister } from "../api/authApi.js";
+import "./Auth.css";
 
-export function Register(){
+export function Register() {
 
-    const [email,setEmail] = useState("");
-    const [password,setPassword] = useState("");
-    const [fullName,setName]= useState("");
-    const [role,setRole] = useState("");
-    const [companyId,setCompanyId] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [fullName, setName] = useState("");
+    const [role, setRole] = useState("");
+    const [companyId, setCompanyId] = useState("");
 
-    async function handleSubmit(event){
+    async function handleSubmit(event) {
         event.preventDefault();
-        try{
-        const data = await authApiRegister(fullName,email,password,role,companyId);
 
-    console.log(data);
-    alert("Registration successful");
+        try {
 
+            const data = await authApiRegister(
+                fullName,
+                email,
+                password,
+                role,
+                companyId
+            );
 
-    }
+            console.log(data);
 
-        catch(err){
+            alert("Registration successful");
+
+        } catch (err) {
+
             console.error(
-            "REGISTER ERROR:",
-            err.response?.data || err.message
-        );
+                "REGISTER ERROR:",
+                err.response?.data || err.message
+            );
+
         }
-
-
     }
 
+    return (
+        <div className="auth-page">
 
-    return(
-        <form onSubmit={handleSubmit}>
+            <div className="auth-shell auth-register">
 
-            <input
-                type="text"
-                value={fullName}
-                onChange={(e) => setName(e.target.value)}
-                required
-            />
+                <div className="auth-brand">
+                    <div className="auth-brand-mark">E</div>
 
-            <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-            />
+                    <span className="auth-brand-name">
+                        EVIDENT.AI
+                    </span>
+                </div>
 
-            <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-            />
+                <div className="auth-card">
 
-            <input
-                list="roles"
-                value={role}
-                onChange={(e) => setRole(e.target.value)}
-                />
+                    <div className="auth-card-header">
 
-                <datalist id="roles">
-  <option value="COMPANY_USER">User</option>
-  <option value="REGULATOR">Regulator</option>
-  <option value="AUDITOR">Auditor</option>
-</datalist>
+                        <span className="auth-eyebrow">
+                            ESG VERIFICATION PLATFORM
+                        </span>
 
-            <input
-                type="text"
-                value={companyId}
-                placeholder='If Applicable enter company Id'
-                onChange={(e) => setCompanyId(e.target.value)}
-            />
+                        <h1>Create your account</h1>
 
-            <button type="submit">
-                Register
-            </button>
+                        <p>
+                            Register for access to the Evident.ai
+                            ESG reporting platform.
+                        </p>
 
-        </form>
+                    </div>
+
+                    <form
+                        className="auth-form"
+                        onSubmit={handleSubmit}
+                    >
+
+                        <div className="auth-field">
+
+                            <label htmlFor="register-name">
+                                Full name
+                            </label>
+
+                            <input
+                                id="register-name"
+                                type="text"
+                                value={fullName}
+                                onChange={(e) =>
+                                    setName(e.target.value)
+                                }
+                                placeholder="Enter your full name"
+                                required
+                            />
+
+                        </div>
+
+                        <div className="auth-field">
+
+                            <label htmlFor="register-email">
+                                Email address
+                            </label>
+
+                            <input
+                                id="register-email"
+                                type="email"
+                                value={email}
+                                onChange={(e) =>
+                                    setEmail(e.target.value)
+                                }
+                                placeholder="you@company.com"
+                                required
+                            />
+
+                        </div>
+
+                        <div className="auth-field">
+
+                            <label htmlFor="register-password">
+                                Password
+                            </label>
+
+                            <input
+                                id="register-password"
+                                type="password"
+                                value={password}
+                                onChange={(e) =>
+                                    setPassword(e.target.value)
+                                }
+                                placeholder="Create a password"
+                                required
+                            />
+
+                        </div>
+
+                        <div className="auth-field">
+
+                            <label htmlFor="register-role">
+                                Account role
+                            </label>
+
+                            <select
+                                id="register-role"
+                                value={role}
+                                onChange={(e) =>
+                                    setRole(e.target.value)
+                                }
+                                required
+                            >
+                                <option value="">
+                                    Select a role
+                                </option>
+
+                                <option value="COMPANY_USER">
+                                    Company User
+                                </option>
+
+                                <option value="AUDITOR">
+                                    Auditor
+                                </option>
+
+                                <option value="REGULATOR">
+                                    Regulator
+                                </option>
+                            </select>
+
+                            <div className="auth-role-note">
+                                Access permissions are determined by
+                                the assigned platform role.
+                            </div>
+
+                        </div>
+
+                        <div className="auth-field">
+
+                            <label htmlFor="register-company">
+                                Company ID
+                            </label>
+
+                            <input
+                                id="register-company"
+                                type="text"
+                                value={companyId}
+                                placeholder="Required for company users"
+                                onChange={(e) =>
+                                    setCompanyId(e.target.value)
+                                }
+                            />
+
+                            <div className="auth-field-help">
+                                Leave blank if your role does not
+                                require a company association.
+                            </div>
+
+                        </div>
+
+                        <button
+                            className="auth-submit"
+                            type="submit"
+                        >
+                            Create Account
+                        </button>
+
+                    </form>
+
+                    <div className="auth-footer">
+                        Already have an account?{" "}
+                        <a href="/login">
+                            Sign in
+                        </a>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
     );
 }
-

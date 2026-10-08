@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import api from "../api/axios.js";
+import "./Admin.css";
 
 export function Companies() {
     const [companies, setCompanies] = useState([]);
@@ -33,57 +34,150 @@ export function Companies() {
     }
 
     return (
-        <div className="page-container">
-            <div className="page-header">
-                <div>
-                    <h1>Companies</h1>
-                    <p>Review registered organizations on the platform.</p>
+    <div className="admin-page">
+
+        <section className="admin-header">
+
+            <div>
+                <span className="page-eyebrow">
+                    PLATFORM ADMINISTRATION
+                </span>
+
+                <div className="admin-title-row">
+
+                    <div>
+                        <h1>Companies</h1>
+
+                        <p>
+                            Review organizations registered on the
+                            Evident.ai platform.
+                        </p>
+                    </div>
+
+                    <div className="admin-record-count">
+                        {companies.length}{" "}
+                        {companies.length === 1
+                            ? "company"
+                            : "companies"}
+                    </div>
+
                 </div>
             </div>
 
-            <div className="table-container">
-                <table className="data-table">
-                    <thead>
-                        <tr>
-                            <th>Company</th>
-                            <th>Registration Number</th>
-                            <th>Industry</th>
-                            <th>Country</th>
-                            <th>Website</th>
-                        </tr>
-                    </thead>
+        </section>
 
-                    <tbody>
-                        {companies.length === 0 ? (
+
+        {companies.length === 0 ? (
+
+            <div className="admin-empty">
+
+                <div className="admin-empty-icon">
+                    C
+                </div>
+
+                <h2>No companies found</h2>
+
+                <p>
+                    There are currently no registered organizations.
+                </p>
+
+            </div>
+
+        ) : (
+
+            <section className="admin-table-card">
+
+                <div className="admin-card-header">
+
+                    <div>
+                        <span className="section-eyebrow">
+                            ORGANIZATION DIRECTORY
+                        </span>
+
+                        <h2>Registered Companies</h2>
+
+                        <p>
+                            Organizations participating in ESG reporting.
+                        </p>
+                    </div>
+
+                    <span className="admin-count">
+                        {companies.length} records
+                    </span>
+
+                </div>
+
+
+                <div className="table-wrapper">
+
+                    <table className="data-table admin-table">
+
+                        <thead>
                             <tr>
-                                <td colSpan="5">No companies found.</td>
+                                <th>Company</th>
+                                <th>Registration Number</th>
+                                <th>Industry</th>
+                                <th>Country</th>
+                                <th>Website</th>
                             </tr>
-                        ) : (
-                            companies.map((company) => (
+                        </thead>
+
+                        <tbody>
+
+                            {companies.map((company) => (
+
                                 <tr key={company.id}>
-                                    <td>{company.company_name}</td>
-                                    <td>{company.registration_number}</td>
-                                    <td>{company.industry || "—"}</td>
-                                    <td>{company.country || "—"}</td>
+
                                     <td>
+                                        <strong>
+                                            {company.company_name}
+                                        </strong>
+                                    </td>
+
+                                    <td>
+                                        {company.registration_number}
+                                    </td>
+
+                                    <td>
+                                        {company.industry || "—"}
+                                    </td>
+
+                                    <td>
+                                        {company.country || "—"}
+                                    </td>
+
+                                    <td>
+
                                         {company.website ? (
+
                                             <a
+                                                className="admin-external-link"
                                                 href={company.website}
                                                 target="_blank"
                                                 rel="noreferrer"
                                             >
-                                                Visit
+                                                Visit →
                                             </a>
+
                                         ) : (
                                             "—"
                                         )}
+
                                     </td>
+
                                 </tr>
-                            ))
-                        )}
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    );
-}
+
+                            ))}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </section>
+
+        )}
+
+    </div>
+)};
