@@ -11,6 +11,8 @@ import verificationRoutes
 import certificateRoutes from "./routes/certificateRoutes.js";
 import dashboardRoutes from "./routes/dashboardRoutes.js";
 import validationRoutes from "./routes/validationRoutes.js";
+import userRoutes from "./routes/userRoutes.js";
+import auditLogRoutes from "./routes/auditLogRoutes.js";
 
 
 import { errorHandler } from "./middlewares/errorMiddleware.js";
@@ -30,6 +32,7 @@ app.post("/debug-register", (req, res) => {
 
 // Routes
 app.use("/api/auth", authRoutes);
+app.use("/api/users", userRoutes);
 app.use("/api/companies",companyRoutes);
 app.use("/api/disclosures",disclosureRoutes);
 app.use("/api/metrics", metricRoutes);
@@ -45,6 +48,7 @@ app.use(
 );
 app.use("/api/certificates", certificateRoutes);
 app.use("/api/dashboard", dashboardRoutes);
+app.use("/api/audit-logs",auditLogRoutes);
 app.use(errorHandler);
 
 export default app;

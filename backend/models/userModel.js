@@ -30,7 +30,26 @@ export const userModel = {
         );
 
         return result.rows[0];
-    }
+    },
+    async getAllUsers() {
+    const result = await db.query(
+        `
+        SELECT
+            u.id,
+            u.full_name,
+            u.email,
+            u.role,
+            u.company_id,
+            c.company_name
+        FROM users u
+        LEFT JOIN companies c
+            ON u.company_id = c.id
+        ORDER BY u.full_name ASC
+        `
+    );
+
+    return result.rows;
+}
 
 }
 

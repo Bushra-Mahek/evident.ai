@@ -87,3 +87,16 @@ export const deleteCompany = async (req,res,next)=>{
         next(err);
     }
 }
+
+export const getAllCompanies = async(req, res, next)=> {
+        try {
+            const companies = await companyService.getAllCompanies(req.user);
+
+            return res.status(200).json({
+                success: true,
+                companies
+            });
+        } catch (error) {
+            next(error);
+        }
+}

@@ -35,14 +35,26 @@ export const auditLogModel = {
     },
 
     async getLogs() {
+    const result = await db.query(
+        `
+        SELECT
+            al.id,
+            al.action,
+            al.entity_type,
+            al.entity_id,
+            al.ip_address,
+            al.created_at,
+            u.full_name AS user_name,
+            u.email AS user_email,
+            u.role AS user_role
+        FROM audit_logs al
+        LEFT JOIN users u
+            ON al.user_id = u.id
+        ORDER BY al.created_at DESC
+        `
+    );
 
-        const result = await db.query(
-            `SELECT *
-             FROM audit_logs
-             ORDER BY created_at DESC`
-        );
-
-        return result.rows;
-    }
+    return result.rows;
+}
 };
 

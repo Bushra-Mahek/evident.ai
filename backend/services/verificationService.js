@@ -4,6 +4,7 @@ import { verificationResultModel } from "../models/verificationResultModel.js";
 import { disclosureAuditModel } from "../models/disclosureAuditModel.js";
 import { transaction } from "../config/db.js";
 import { AppError } from "../middlewares/errorMiddleware.js";
+import { certificateService } from "./certificateService.js";
 
 
 export const verificationService = {
@@ -69,7 +70,7 @@ export const verificationService = {
 
 
         // 5. Perform verification atomically
-        return await transaction(async (client) => {
+        const result= await transaction(async (client) => {
 
             const verification =
                 await verificationResultModel
@@ -99,12 +100,21 @@ export const verificationService = {
     client
 );
 
+return {
+            disclosure: updatedDisclosure,
+            verification
+        };
+    });
+
+
+const certificate =
+    await certificateService.createCertificate(disclosureId);
+
 
             return {
-                disclosure: updatedDisclosure,
-                verification
+                ...result,
+                certificate
             };
-        });
     },
 
 
@@ -179,6 +189,8 @@ await disclosureAuditModel.createLog(
     "DRAFT",
     client
 );
+
+
 
 
             return {

@@ -1,4 +1,5 @@
 import { companyModel } from "../models/companyModel.js";
+import { AppError } from "../middlewares/errorMiddleware.js";
 
 
 export const companyService = {
@@ -30,6 +31,14 @@ export const companyService = {
             throw new Error("company not found");
         }
         return result;
+    },
+
+     async getAllCompanies(user) {
+        if (user.role !== "ADMIN") {
+            throw new AppError("Access denied", 403);
+        }
+
+        return await companyModel.getCompanies();
     },
 
     async deleteCompany(id){

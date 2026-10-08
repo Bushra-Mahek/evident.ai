@@ -12,6 +12,10 @@ import { RoleRoute } from './RoleRoute.jsx';
 import { ReviewDisclosures } from "../pages/ReviewDisclosures.jsx";
 import { AuditHistory } from "../pages/AuditHistory.jsx";
 import { AuditHistoryDetail } from "../pages/AuditHistoryDetail.jsx";
+import { Certificates } from '../pages/Certificates.jsx';
+import { Users } from '../pages/Users.jsx';
+import { Companies } from '../pages/Companies.jsx';
+import { AuditLogs } from '../pages/AuditLog.jsx';
 
 function AppRoutes(){
     return(
@@ -60,13 +64,26 @@ function AppRoutes(){
     }
 />
 
+<Route
+path="/certificates"
+    element={
+        <ProtectedRoutes>
+            <RoleRoute allowed={["COMPANY_USER","AUDITOR"]}>
+                <AppLayout>
+                    <Certificates />
+                </AppLayout>
+            </RoleRoute>
+        </ProtectedRoutes>
+    }
+        />
+
         <Route
     path="/users"
     element={
         <ProtectedRoutes>
             <RoleRoute allowed={["ADMIN"]}>
                 <AppLayout>
-                    <ComingSoon />
+                    <Users />
                 </AppLayout>
             </RoleRoute>
         </ProtectedRoutes>
@@ -79,7 +96,7 @@ function AppRoutes(){
         <ProtectedRoutes>
             <RoleRoute allowed={["ADMIN"]}>
                 <AppLayout>
-                    <ComingSoon />
+                    <Companies />
                 </AppLayout>
             </RoleRoute>
         </ProtectedRoutes>
@@ -92,7 +109,7 @@ function AppRoutes(){
         <ProtectedRoutes>
             <RoleRoute allowed={["ADMIN"]}>
                 <AppLayout>
-                    <ComingSoon />
+                    <AuditLogs />
                 </AppLayout>
             </RoleRoute>
         </ProtectedRoutes>

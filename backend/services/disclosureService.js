@@ -814,9 +814,11 @@ async getDisclosureTimeline(id, user) {
         );
     }
 
-    // Draft disclosures are private to owning company
+    // Draft disclosures are private to the owning company,
+    // except auditors who need access to historical review records.
     if (
         disclosure.status === "DRAFT" &&
+        user.role !== "AUDITOR" &&
         (
             user.role !== "COMPANY_USER" ||
             disclosure.company_id !== user.company_id
@@ -828,7 +830,7 @@ async getDisclosureTimeline(id, user) {
         );
     }
 
-    // Company users can only view their own disclosures
+    // Company users can only view their own company's disclosure history
     if (
         user.role === "COMPANY_USER" &&
         disclosure.company_id !== user.company_id

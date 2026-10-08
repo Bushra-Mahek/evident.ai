@@ -76,19 +76,20 @@ export const certificateModel = {
 
 
     async getCertificatesByCompany(companyId) {
-        const result = await db.query(
-            `
-            SELECT
-                c.*
-            FROM certificates c
-            JOIN disclosures d
-                ON c.disclosure_id = d.id
-            WHERE d.company_id = $1
-            ORDER BY c.generated_at DESC
-            `,
-            [companyId]
-        );
+    const result = await db.query(
+        `
+        SELECT
+            c.*,
+            d.reporting_year
+        FROM certificates c
+        JOIN disclosures d
+            ON c.disclosure_id = d.id
+        WHERE d.company_id = $1
+        ORDER BY c.generated_at DESC
+        `,
+        [companyId]
+    );
 
-        return result.rows;
-    }
+    return result.rows;
+}
 };

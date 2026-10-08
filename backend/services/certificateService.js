@@ -90,7 +90,7 @@ export const certificateService = {
                 certificateNumber,
 
                 companyName:
-                    company.name,
+    company.company_name,
 
                 reportingYear:
                     disclosure.reporting_year,
@@ -141,5 +141,79 @@ export const certificateService = {
 
 
         return certificate;
+    },
+
+    async getCompanyCertificates(user) {
+
+    if (user.role === "COMPANY_USER") {
+        return await certificateModel.getCertificatesByCompany(
+            user.company_id
+        );
     }
+
+    if (user.role === "AUDITOR"  ||
+        user.role === "ADMIN") {
+        return await certificateModel.getAllCertificates();
+    }
+
+    throw new Error("Access denied");
+},
+
+
+async getCertificate(id, user) {
+
+    const certificate =
+        await certificateModel.getById(id);
+
+    if (!certificate) {
+        throw new Error("Certificate not found");
+    }
+
+    const disclosure =
+        await disclosureModel.getDisclosure(
+            certificate.disclosure_id
+        );
+
+    if (!disclosure) {
+        throw new Error("Disclosure not found");
+    }
+
+    if (
+        user.role === "COMPANY_USER" &&
+        disclosure.company_id !== user.company_id
+    ) {
+        throw new Error("Access denied");
+    }
+
+    const downloadUrl =
+        await s3Service.getSignedUrl(
+            certificate.certificate_url
+        );
+
+    return {
+        ...certificate,
+        downloadUrl
+    };
+},
+
+async getAllCertificates() {
+    const result = await db.query(
+        `
+        SELECT
+            c.*,
+            d.reporting_year,
+            d.company_id,
+            co.company_name
+        FROM certificates c
+        JOIN disclosures d
+            ON c.disclosure_id = d.id
+        JOIN companies co
+            ON d.company_id = co.id
+        ORDER BY c.generated_at DESC
+        `
+    );
+
+    return result.rows;
+},
+
 };

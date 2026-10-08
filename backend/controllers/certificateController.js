@@ -20,5 +20,47 @@ export const certificateController = {
         } catch (error) {
             next(error);
         }
+    },
+
+
+    async getCompanyCertificates(req, res, next) {
+        try {
+
+            const certificates =
+                await certificateService.getCompanyCertificates(
+                    req.user
+                );
+
+            return res.status(200).json({
+                success: true,
+                certificates
+            });
+
+        } catch (error) {
+            next(error);
+        }
+    },
+
+
+    async getCertificate(req, res, next) {
+        try {
+
+            const { id } = req.params;
+
+            const certificate =
+                await certificateService.getCertificate(
+                    id,
+                    req.user
+                );
+
+            return res.status(200).json({
+                success: true,
+                certificate
+            });
+
+        } catch (error) {
+            next(error);
+        }
     }
+
 };
