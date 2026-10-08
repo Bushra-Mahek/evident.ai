@@ -165,19 +165,18 @@ export const verificationService = {
 
 
             const updatedDisclosure =
-                await disclosureModel.updateStatus(
-                    disclosureId,
-                    "REJECTED",
-                    client
-                );
+    await disclosureModel.updateStatus(
+        disclosureId,
+        "DRAFT",
+        client
+    );
 
-
-            await disclosureAuditModel.createLog(
+await disclosureAuditModel.createLog(
     disclosureId,
     user.id,
     "REJECT_DISCLOSURE",
     "UNDER_REVIEW",
-    "REJECTED",
+    "DRAFT",
     client
 );
 

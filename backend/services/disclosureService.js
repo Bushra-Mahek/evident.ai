@@ -486,30 +486,28 @@ if (!validation.valid) {
     // --------------------------------
 
     const existingRoot =
-        await merkleModel
-            .getByDisclosureAndRoot(
-                id,
-                root
-            );
-
-    if (existingRoot) {
-
-        throw new AppError(
-            "This disclosure version is already anchored",
-            409
+    await merkleModel
+        .getByDisclosureAndRoot(
+            id,
+            root
         );
-    }
+
 
 
     // --------------------------------
     // 10. Anchor on Sepolia
     // --------------------------------
 
-    const blockchainResult =
+    let blockchainResult = null;
+
+if (!existingRoot) {
+
+    blockchainResult =
         await blockchainService
             .anchorMerkleRoot(
                 merkleRoot
             );
+}
 
 
     // --------------------------------
@@ -520,41 +518,47 @@ if (!validation.valid) {
         async (client) => {
 
             const anchoredAt =
+    blockchainResult?.timestamp
+        ? new Date(
+            Number(
                 blockchainResult.timestamp
-                    ? new Date(
-                        Number(
-                            blockchainResult.timestamp
-                        ) * 1000
-                    )
-                    : new Date();
+            ) * 1000
+        )
+        : existingRoot?.anchored_at
+            ? new Date(existingRoot.anchored_at)
+            : new Date();
 
+            let merkleRootRecord = existingRoot;
 
-            const merkleRootRecord =
-                await merkleModel.create(
-                    id,
-                    root,
-                    "SEPOLIA",
-                    blockchainResult.transactionHash,
-                    blockchainResult.blockNumber,
-                    anchoredAt,
-                    client
-                );
+if (!existingRoot) {
+
+    merkleRootRecord =
+        await merkleModel.create(
+            id,
+            root,
+            "SEPOLIA",
+            blockchainResult.transactionHash,
+            blockchainResult.blockNumber,
+            anchoredAt,
+            client
+        );
+}
 
 
             if (
-                blockchainResult.transactionHash
-            ) {
+    blockchainResult?.transactionHash
+) {
 
-                await blockchainTransactionModel
-                    .create(
-                        id,
-                        blockchainResult.transactionHash,
-                        blockchainResult.blockNumber,
-                        blockchainResult.gasUsed,
-                        "CONFIRMED",
-                        client
-                    );
-            }
+    await blockchainTransactionModel
+        .create(
+            id,
+            blockchainResult.transactionHash,
+            blockchainResult.blockNumber,
+            blockchainResult.gasUsed,
+            "CONFIRMED",
+            client
+        );
+}
 
 
             // --------------------------------

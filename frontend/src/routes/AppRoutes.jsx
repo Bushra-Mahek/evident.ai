@@ -28,7 +28,7 @@ function AppRoutes(){
         <ProtectedRoutes>
             <RoleRoute allowed={["COMPANY_USER"]}>
                 <AppLayout>
-                    <ReviewDisclosures/>
+                    <Disclosure/>
                 </AppLayout>
             </RoleRoute>
         </ProtectedRoutes>

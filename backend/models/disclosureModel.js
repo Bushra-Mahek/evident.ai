@@ -135,10 +135,15 @@ async getPendingReviews() {
 
 async getCompletedReviews() {
     const result = await db.query(
-        `SELECT *
-         FROM disclosures
-         WHERE status IN ('VERIFIED', 'REJECTED')
-         ORDER BY updated_at DESC`
+        `SELECT DISTINCT d.*
+         FROM disclosures d
+         JOIN disclosure_audit_logs dal
+            ON dal.disclosure_id = d.id
+         WHERE dal.action IN (
+             'VERIFY_DISCLOSURE',
+             'REJECT_DISCLOSURE'
+         )
+         ORDER BY d.updated_at DESC`
     );
 
     return result.rows;
