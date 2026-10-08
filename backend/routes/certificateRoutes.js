@@ -19,7 +19,7 @@ router.post(
 router.get(
     "/",
     authenticate,
-    authorize("COMPANY_USER","AUDITOR","ADMIN"),
+    authorize("COMPANY_USER","AUDITOR","ADMIN","REGULATOR"),
     certificateController.getCompanyCertificates
 );
 
@@ -28,7 +28,7 @@ router.get(
 router.get(
     "/:id",
     authenticate,
-    authorize("COMPANY_USER", "AUDITOR","ADMIN"),
+    authorize("COMPANY_USER", "AUDITOR","ADMIN","REGULATOR"),
     certificateController.getCertificate
 );
 

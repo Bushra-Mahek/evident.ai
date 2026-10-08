@@ -16,6 +16,8 @@ import { Certificates } from '../pages/Certificates.jsx';
 import { Users } from '../pages/Users.jsx';
 import { Companies } from '../pages/Companies.jsx';
 import { AuditLogs } from '../pages/AuditLog.jsx';
+import { RegulatorDisclosures } from "../pages/RegulatorDisclosures.jsx";
+import {RegulatorDisclosureDetail } from "../pages/RegulatorDisclosureDetail.jsx";
 
 function AppRoutes(){
     return(
@@ -135,6 +137,45 @@ path="/certificates"
         <ProtectedRoutes>
             <RoleRoute allowed={["AUDITOR"]}>
                 <AuditHistoryDetail />
+            </RoleRoute>
+        </ProtectedRoutes>
+    }
+/>
+
+<Route
+    path="/regulator/disclosures"
+    element={
+        <ProtectedRoutes>
+            <RoleRoute allowed={["REGULATOR"]}>
+                <AppLayout>
+                    <RegulatorDisclosures />
+                </AppLayout>
+            </RoleRoute>
+        </ProtectedRoutes>
+    }
+/>
+
+<Route
+    path="/regulator/disclosures/:disclosureId"
+    element={
+        <ProtectedRoutes>
+            <RoleRoute allowed={["REGULATOR"]}>
+                <AppLayout>
+                    <RegulatorDisclosureDetail />
+                </AppLayout>
+            </RoleRoute>
+        </ProtectedRoutes>
+    }
+/>
+
+<Route
+    path="/regulator/certificates"
+    element={
+        <ProtectedRoutes>
+            <RoleRoute allowed={["REGULATOR"]}>
+                <AppLayout>
+                    <Certificates />
+                </AppLayout>
             </RoleRoute>
         </ProtectedRoutes>
     }

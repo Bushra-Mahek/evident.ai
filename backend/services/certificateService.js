@@ -144,16 +144,15 @@ export const certificateService = {
     },
 
     async getCompanyCertificates(user) {
+    if (user.role === "AUDITOR"  ||
+        user.role === "ADMIN" ||  user.role === "REGULATOR") {
+        return await certificateModel.getAllCertificates();
+    }
 
     if (user.role === "COMPANY_USER") {
         return await certificateModel.getCertificatesByCompany(
             user.company_id
         );
-    }
-
-    if (user.role === "AUDITOR"  ||
-        user.role === "ADMIN") {
-        return await certificateModel.getAllCertificates();
     }
 
     throw new Error("Access denied");
@@ -196,24 +195,5 @@ async getCertificate(id, user) {
     };
 },
 
-async getAllCertificates() {
-    const result = await db.query(
-        `
-        SELECT
-            c.*,
-            d.reporting_year,
-            d.company_id,
-            co.company_name
-        FROM certificates c
-        JOIN disclosures d
-            ON c.disclosure_id = d.id
-        JOIN companies co
-            ON d.company_id = co.id
-        ORDER BY c.generated_at DESC
-        `
-    );
-
-    return result.rows;
-},
 
 };

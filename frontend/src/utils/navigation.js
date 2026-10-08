@@ -15,8 +15,8 @@ export const navigation = {
 
     [ROLES.REGULATOR]: [
         { label: "Dashboard", path: "/dashboard" },
-        { label: "Disclosures", path: "/disclosures" },
-        { label: "Certificates", path: "/certificates" }
+        { label: "Disclosures", path: "/regulator/disclosures" },
+        { label: "Certificates", path: "/regulator/certificates" }
     ],
 
     [ROLES.ADMIN]: [

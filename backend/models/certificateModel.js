@@ -91,5 +91,25 @@ export const certificateModel = {
     );
 
     return result.rows;
-}
+},
+
+ async getAllCertificates() {
+        const result = await db.query(
+            `
+            SELECT
+                c.*,
+                d.reporting_year,
+                d.company_id,
+                co.company_name
+            FROM certificates c
+            JOIN disclosures d
+                ON c.disclosure_id = d.id
+            JOIN companies co
+                ON d.company_id = co.id
+            ORDER BY c.generated_at DESC
+            `
+        );
+
+        return result.rows;
+    },
 };
