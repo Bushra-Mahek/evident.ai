@@ -10,7 +10,7 @@ The platform allows organizations to submit ESG disclosures, attach supporting e
 
 ## 🚀 Live Application
 
-**Live Demo:** Evident.ai
+**Live Demo:** https://evident-ai-frontend.onrender.com
 
 **GitHub:** Bushra-Mahek/evident.ai
 
