@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { authApiRegister } from "../api/authApi.js";
+import { useNavigate } from "react-router-dom";
 import "./Auth.css";
 
 export function Register() {
@@ -9,6 +10,8 @@ export function Register() {
     const [fullName, setName] = useState("");
     const [role, setRole] = useState("");
     const [companyId, setCompanyId] = useState("");
+
+    const navigate = useNavigate();
 
     async function handleSubmit(event) {
         event.preventDefault();
@@ -25,7 +28,10 @@ export function Register() {
 
             console.log(data);
 
-            alert("Registration successful");
+            alert("Registration successful. Please log in.");
+
+    navigate("/login");
+
 
         } catch (err) {
 

@@ -200,25 +200,20 @@ export const disclosureService = {
     });
 },
 
-    async deleteDisclosure(id, user, ipAddress) {
-
+    
+async deleteDisclosure(id, user, ipAddress) {
     const disclosure = await disclosureModel.getDisclosure(id);
 
     if (!disclosure) {
-        throw new AppError(
-            "Disclosure not found",
-            404
-        );
+        throw new AppError("Disclosure not found", 404);
     }
 
-    if (
-        user.role === "COMPANY_USER" &&
-        disclosure.company_id !== user.company_id
-    ) {
-        throw new AppError(
-            "Access denied",
-            403
-        );
+    if (user.role !== "COMPANY_USER") {
+        throw new AppError("Access denied", 403);
+    }
+
+    if (disclosure.company_id !== user.company_id) {
+        throw new AppError("Access denied", 403);
     }
 
     if (disclosure.status !== "DRAFT") {
@@ -229,12 +224,38 @@ export const disclosureService = {
     }
 
     return await transaction(async (client) => {
+        // Remove dependent database records before deleting the draft.
+        // Preserve the general audit log, which records the deletion.
 
-        const deleted =
-            await disclosureModel.deleteDisclosure(
-                id,
-                client
-            );
+        await client.query(
+            `DELETE FROM certificates WHERE disclosure_id = $1`,
+            [id]
+        );
+
+        await client.query(
+            `DELETE FROM blockchain_transactions WHERE disclosure_id = $1`,
+            [id]
+        );
+
+        await client.query(
+            `DELETE FROM merkle_roots WHERE disclosure_id = $1`,
+            [id]
+        );
+
+        await client.query(
+            `DELETE FROM verification_results WHERE disclosure_id = $1`,
+            [id]
+        );
+
+        await client.query(
+            `DELETE FROM documents WHERE disclosure_id = $1`,
+            [id]
+        );
+
+        await client.query(
+            `DELETE FROM disclosures WHERE id = $1`,
+            [id]
+        );
 
         await auditLogModel.createLog(
             user.id,
@@ -245,9 +266,10 @@ export const disclosureService = {
             client
         );
 
-        return deleted;
+        return true;
     });
 },
+
 
 
     async reviseDisclosure(id, user) {

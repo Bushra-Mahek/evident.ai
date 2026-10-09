@@ -1607,7 +1607,7 @@ async function handleRunValidation() {
                                         </strong>
 
                                         <span
-                                            className={`validation-severity validation-severity-${result.severity?.toLowerCase()}`}
+                                            className={`validation-severity validation-severity-${(result.severity || "unknown").toLowerCase()}`}
                                         >
                                             {result.severity}
                                         </span>
