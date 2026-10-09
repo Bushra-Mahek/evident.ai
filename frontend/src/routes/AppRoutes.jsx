@@ -5,7 +5,7 @@ import { Dashboard } from '../pages/Dashboard.jsx';
 import { ProtectedRoutes } from './ProtectedRoutes.jsx';
 import { AppLayout } from '../layouts/AppLayout.jsx';
 import { Disclosures } from '../pages/Disclosures.jsx';
-import { ComingSoon } from '../pages/comingSoon.jsx';
+import { ComingSoon } from '../pages/ComingSoon.jsx';
 import { Disclosure } from '../pages/Disclosure.jsx';
 import { DisclosureReview } from "../pages/DisclosureReview.jsx";
 import { RoleRoute } from './RoleRoute.jsx';
