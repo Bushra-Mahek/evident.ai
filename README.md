@@ -436,6 +436,14 @@ Render Node/Express API
 
 Environment-specific configuration is supplied through deployment environment variables rather than committing secrets to the repository.
 
+## Screenshots
+<img width="1920" height="1080" alt="Screenshot (911)" src="https://github.com/user-attachments/assets/9bfbc9af-aab1-48d7-be5a-1a5c15354c8b" />
+
+<img width="1920" height="1080" alt="Screenshot (912)" src="https://github.com/user-attachments/assets/8b13bcd1-38ea-49aa-bbca-bd1c82d91daa" />
+
+<img width="1920" height="1080" alt="Screenshot (914)" src="https://github.com/user-attachments/assets/74e131e2-2373-4b04-b45f-45ee4b9a14e0" />
+
+
 🔮 Future Roadmap
 Evident.ai is designed as a foundation that can be extended beyond deterministic verification workflows.
 Planned future capabilities include:
