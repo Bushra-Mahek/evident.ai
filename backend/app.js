@@ -21,7 +21,7 @@ dotenv.config();
 
 const app = express();
 console.log("🔥 APP.JS LOADED");
-app.use(cors({origin:"http://localhost:5173"}));
+app.use(cors({origin: process.env.FRONTEND_URL || "http://localhost:5173"}));
 app.use(express.json());
 
 app.post("/debug-register", (req, res) => {
