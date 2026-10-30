@@ -7,7 +7,7 @@ export const crossVerificationRules = {
         // expected to match a reported value perfectly.
 
         if (
-            metric.category === "ENVIRONMENTAL"
+            metric.category === "ENVIRONMENT"
         ) {
             return 0.05; // 5%
         }

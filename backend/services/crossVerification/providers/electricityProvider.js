@@ -13,7 +13,7 @@ export const electricityProvider = {
 
         const mockExternalData = {
             value: 12300,
-            unit: "kWh",
+            unit: "MWh",
             sourceType: "MOCK_UTILITY_API",
             sourceReference:
                 `UTILITY-${companyId}-${periodStart}-${periodEnd}`

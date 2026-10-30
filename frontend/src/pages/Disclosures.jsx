@@ -91,15 +91,13 @@ export function Disclosures() {
                     </p>
                 </div>
 
-                {!currentD && (
-                    <button
-                        className="btn btn-primary"
-                        onClick={() => setShowForm(true)}
-                    >
-                        <span className="btn-icon">+</span>
-                        Create Disclosure
-                    </button>
-                )}
+                <button
+    className="btn btn-primary"
+    onClick={() => setShowForm(true)}
+>
+    <span className="btn-icon">+</span>
+    Create Disclosure
+</button>
             </div>
 
 
